@@ -2,14 +2,12 @@
 const SUPABASE_URL = 'https://sskzgkgybbtnqugbpbyf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNza3pna2d5YmJ0bnF1Z2JwYnlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MDY4MzQsImV4cCI6MjA4NTk4MjgzNH0.-_zzyT1YPVHFDLHXDEzTWm2NlLmq0CBJK2RNV60XcEU';
 
-// Initialize Supabase client
-const supabase = supabasejs.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-)
+
+// Initialize Supabase client using the global supabase from CDN
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Make available globally
-window.supabase = supabase
+window.supabaseClient = supabaseClient;
 
 // Utility Functions
 const SupabaseUtils = {
@@ -47,21 +45,21 @@ const SupabaseUtils = {
             const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
             const filePath = `${folder}/${fileName}`;
 
-            const { data, error } = await supabase.storage
+            const { data, error } = await supabaseClient.storage
                 .from('blog-media')
                 .upload(filePath, file);
 
             if (error) throw error;
 
             // Get public URL
-            const { data: { publicUrl } } = supabase.storage
+            const { data: urlData } = supabaseClient.storage
                 .from('blog-media')
                 .getPublicUrl(filePath);
 
             return {
                 success: true,
                 path: filePath,
-                url: publicUrl,
+                url: urlData.publicUrl,
                 fileName: fileName
             };
         } catch (error) {
@@ -76,7 +74,7 @@ const SupabaseUtils = {
     // Delete file from Supabase Storage
     deleteFile: async (filePath) => {
         try {
-            const { error } = await supabase.storage
+            const { error } = await supabaseClient.storage
                 .from('blog-media')
                 .remove([filePath]);
 
@@ -179,6 +177,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export session manager
-
 window.SessionManager = SessionManager;
-
