@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Blog - Zawadi Careers</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../assets/zawadi-logo.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="../assets/zawadi-logo.png" alt="Zawadi Careers Logo" class="logo">
+                <span class="brand-name">Zawadi Careers</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="blog.html" class="nav-link active">Blog</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+                <div class="nav-link dropdown">
+                    <span>Resources <i class="fas fa-chevron-down"></i></span>
+                    <div class="dropdown-content">
+                        <a href="#"><i class="fas fa-road"></i> Career Paths</a>
+                        <a href="#"><i class="fas fa-graduation-cap"></i> Skill Development</a>
+                        <a href="#"><i class="fas fa-briefcase"></i> Job Search</a>
+                        <a href="#"><i class="fas fa-bullhorn"></i> Opportunities</a>
+                    </div>
+                </div>
+                <a href="#newsletter" class="btn btn-outline">Subscribe</a>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search articles..." id="blogSearchInput">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Career Insights & Resources</h1>
+            <p>Explore articles, guides, and stories to advance your career journey in Africa</p>
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Articles</button>
+                <button class="filter-tab" data-filter="featured">Featured</button>
+                <button class="filter-tab" data-filter="popular">Most Popular</button>
+                <button class="filter-tab" data-filter="recent">Recent</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <section class="blog-listing">
+        <div class="container">
+            <div class="listing-container">
+                <main class="blog-main">
+                    <div class="blog-filters">
+                        <div class="filter-group">
+                            <label for="categoryFilter">Category:</label>
+                            <select id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <!-- Categories will be loaded dynamically -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sortFilter">Sort by:</label>
+                            <select id="sortFilter">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="popular">Most Popular</option>
+                                <option value="views">Most Viewed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="blog-grid" id="blogGrid">
+                        <!-- Blogs will be loaded dynamically -->
+                    </div>
+
+                    <div class="pagination" id="pagination">
+                        <!-- Pagination will be loaded dynamically -->
+                    </div>
+                </main>
+
+                <aside class="blog-sidebar">
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Categories</h3>
+                        <div class="category-list" id="sidebarCategories">
+                            <!-- Categories will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Popular Articles -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Popular This Week</h3>
+                        <div class="popular-articles" id="popularArticles">
+                            <!-- Popular articles will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Widget -->
+                    <div class="sidebar-widget newsletter-widget">
+                        <h3 class="widget-title">Stay Updated</h3>
+                        <p>Get career tips and opportunities</p>
+                        <form id="sidebarNewsletterForm">
+                            <input type="email" placeholder="Your email" required>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-paper-plane"></i> Subscribe
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="sidebar-widget stats-widget">
+                        <h3 class="widget-title">Community Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <i class="fas fa-newspaper"></i>
+                                <span class="stat-count" id="totalArticles">0</span>
+                                <span class="stat-label">Articles</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-comments"></i>
+                                <span class="stat-count" id="totalComments">0</span>
+                                <span class="stat-label">Comments</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-eye"></i>
+                                <span class="stat-count" id="totalViews">0</span>
+                                <span class="stat-label">Views</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="container">
+            <div class="newsletter-card">
+                <div class="newsletter-content">
+                    <h2>Never Miss Career Opportunities</h2>
+                    <p>Subscribe to receive curated job alerts, industry insights, and career development resources.</p>
+                    <div class="featured-benefit">
+                        <i class="fas fa-star"></i>
+                        <span>Weekly digest of top opportunities across Africa</span>
+                    </div>
+                </div>
+                <div class="newsletter-form">
+                    <form id="blogNewsletterForm">
+                        <div class="form-group">
+                            <input type="email" placeholder="Your work email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-bell"></i> Get Job Alerts
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <img src="../assets/zawadi-logo.png" alt="Zawadi Careers" class="footer-logo">
+                        <h3>Zawadi Careers</h3>
+                    </div>
+                    <p class="footer-description">
+                        Your guided career companion in Africa.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Blog Categories</h4>
+                    <ul>
+                        <li><a href="#">Career Clarity</a></li>
+                        <li><a href="#">Skill Development</a></li>
+                        <li><a href="#">Job Search</a></li>
+                        <li><a href="#">Opportunities</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="categories.html">Categories</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>Have questions? <a href="mailto:info@zawadicareers.com">Email us</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Zawadi Careers. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html" class="mobile-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="blog.html" class="mobile-nav-item active">
+            <i class="fas fa-newspaper"></i>
+            <span>Blog</span>
+        </a>
+        <a href="categories.html" class="mobile-nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="#newsletter" class="mobile-nav-item">
+            <i class="fas fa-bell"></i>
+            <span>Updates</span>
+        </a>
+        <button class="mobile-nav-item" id="mobileSearchBtn">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/supabase.js"></script>
+    <script src="../js/blog.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initBlogPage();
+        });
+    </script>
+</body>
+</html>

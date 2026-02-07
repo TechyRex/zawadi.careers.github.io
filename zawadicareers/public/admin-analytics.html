@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Zawadi Careers Admin</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../assets/zawadi-logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <img src="../assets/zawadi-logo.png" alt="Zawadi Careers" class="admin-logo">
+            <h2>Zawadi Admin</h2>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <h3>Dashboard</h3>
+                <a href="admin-dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <h3>Analytics</h3>
+                <a href="admin-analytics.html" class="nav-link active">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Traffic
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-chart"></i> User Behavior
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <h3>Reports</h3>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-file-export"></i> Export Data
+                </a>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="date-range-selector">
+                <select id="analyticsPeriod">
+                    <option value="7">Last 7 days</option>
+                    <option value="30" selected>Last 30 days</option>
+                    <option value="90">Last 90 days</option>
+                    <option value="365">Last year</option>
+                </select>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Analytics -->
+    <main class="admin-main analytics-main">
+        <!-- Analytics Header -->
+        <header class="analytics-header">
+            <div class="header-left">
+                <h1>Analytics Dashboard</h1>
+                <p>Track performance and user engagement</p>
+            </div>
+            <div class="header-right">
+                <div class="date-range">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDateRange">Oct 1-31, 2024</span>
+                    <button class="btn btn-outline btn-sm" id="refreshAnalytics">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Key Metrics -->
+        <section class="key-metrics">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Total Views</h3>
+                        <span class="metric-change positive">+12%</span>
+                    </div>
+                    <div class="metric-value" id="totalViewsMetric">0</div>
+                    <div class="metric-chart">
+                        <canvas id="viewsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Total Reads</h3>
+                        <span class="metric-change positive">+8%</span>
+                    </div>
+                    <div class="metric-value" id="totalReadsMetric">0</div>
+                    <div class="metric-chart">
+                        <canvas id="readsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Completion Rate</h3>
+                        <span class="metric-change positive">+5%</span>
+                    </div>
+                    <div class="metric-value" id="completionRateMetric">0%</div>
+                    <div class="metric-chart">
+                        <canvas id="completionChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Avg. Read Time</h3>
+                        <span class="metric-change negative">-2%</span>
+                    </div>
+                    <div class="metric-value" id="avgReadTimeMetric">0 min</div>
+                    <div class="metric-chart">
+                        <canvas id="readTimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="chart-row">
+                <div class="chart-card wide">
+                    <div class="chart-header">
+                        <h3>Traffic Overview</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item"><i class="fas fa-circle" style="color: #1a73e8;"></i> Views</span>
+                            <span class="legend-item"><i class="fas fa-circle" style="color: #34A853;"></i> Reads</span>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Traffic Sources</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="sourcesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Category Performance</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="categoriesChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Engagement</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Device Breakdown</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="devicesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tables Section -->
+        <section class="tables-section">
+            <div class="table-row">
+                <!-- Top Performing Blogs -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Top Performing Blogs</h3>
+                        <button class="btn btn-sm btn-outline" id="exportTopBlogs">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                    <div class="table-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Views</th>
+                                        <th>Reads</th>
+                                        <th>Completion</th>
+                                        <th>Likes</th>
+                                        <th>Comments</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topBlogsTable">
+                                    <!-- Top blogs will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Subscribers -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Subscriber Growth</h3>
+                        <span class="table-stats">+<span id="newSubscribers">0</span> this month</span>
+                    </div>
+                    <div class="table-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Email</th>
+                                        <th>Source</th>
+                                        <th>Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscribersTable">
+                                    <!-- Subscribers will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Geographic Data -->
+        <section class="geo-section">
+            <div class="geo-card">
+                <div class="geo-header">
+                    <h3>Geographic Distribution (Top 10)</h3>
+                    <select id="geoFilter">
+                        <option value="views">By Views</option>
+                        <option value="users">By Users</option>
+                    </select>
+                </div>
+                <div class="geo-body">
+                    <div class="geo-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Views</th>
+                                    <th>Users</th>
+                                    <th>Engagement</th>
+                                </tr>
+                            </thead>
+                            <tbody id="geoTable">
+                                <!-- Geographic data will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="geo-map">
+                        <div class="map-placeholder">
+                            <i class="fas fa-globe-africa"></i>
+                            <p>Geographic heatmap visualization</p>
+                            <small>Focus on African countries</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights & Recommendations -->
+        <section class="insights-section">
+            <div class="insights-card">
+                <div class="insights-header">
+                    <h3><i class="fas fa-lightbulb"></i> Insights & Recommendations</h3>
+                </div>
+                <div class="insights-body">
+                    <div class="insight-item positive">
+                        <div class="insight-icon">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>High Performance</h4>
+                            <p>Career Clarity articles are performing 45% better than average. Consider creating more content in this category.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item warning">
+                        <div class="insight-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Low Engagement</h4>
+                            <p>Articles published on weekends receive 30% fewer reads. Schedule major publications for weekdays.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item info">
+                        <div class="insight-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Optimal Read Time</h4>
+                            <p>Articles with 7-10 minute read times have the highest completion rates (78%).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Mobile Traffic</h4>
+                            <p>72% of your readers access content via mobile. Ensure all content is mobile-optimized.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/supabase.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnalyticsPage();
+        });
+    </script>
+</body>
+</html>

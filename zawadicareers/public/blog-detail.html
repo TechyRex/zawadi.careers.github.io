@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Article - Zawadi Careers</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../assets/zawadi-logo.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="../assets/zawadi-logo.png" alt="Zawadi Careers Logo" class="logo">
+                <span class="brand-name">Zawadi Careers</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+                <a href="#comments" class="nav-link">Comments</a>
+                <button class="btn btn-outline" id="shareArticleBtn">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Content Container -->
+    <div class="blog-detail-container">
+        <!-- Reading Progress Bar -->
+        <div class="reading-progress" id="readingProgress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Section Navigation -->
+        <div class="section-nav" id="sectionNav">
+            <button class="nav-btn prev-btn" id="prevSectionBtn" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="section-indicator">
+                <span id="currentSection">1</span> of <span id="totalSections">0</span>
+            </div>
+            <button class="nav-btn next-btn" id="nextSectionBtn">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Blog Content Area -->
+        <main class="blog-content-wrapper">
+            <!-- Blog content will be loaded dynamically section by section -->
+            <div class="blog-hero" id="blogHero">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading article...</p>
+                </div>
+            </div>
+
+            <article class="blog-article" id="blogArticle">
+                <!-- Sections will be loaded here -->
+            </article>
+
+            <!-- Blog Actions -->
+            <div class="blog-actions">
+                <button class="action-btn like-btn" id="likeBtn">
+                    <i class="far fa-heart"></i>
+                    <span id="likeCount">0</span> Likes
+                </button>
+                <button class="action-btn bookmark-btn" id="bookmarkBtn">
+                    <i class="far fa-bookmark"></i> Save
+                </button>
+                <button class="action-btn share-btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+
+            <!-- Author Info -->
+            <div class="author-card" id="authorInfo">
+                <!-- Author info will be loaded dynamically -->
+            </div>
+
+            <!-- Comments Section -->
+            <section class="comments-section" id="comments">
+                <div class="comments-header">
+                    <h2><i class="fas fa-comments"></i> Discussion</h2>
+                    <span class="comments-count" id="commentsCount">0 Comments</span>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="comment-form-card">
+                    <h3>Share Your Thoughts</h3>
+                    <p>Join the conversation (no login required)</p>
+                    <form id="commentForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="commentName" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="commentEmail" placeholder="Your Email (optional)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="commentContent" placeholder="Your comment..." rows="4" required></textarea>
+                        </div>
+                        <div class="form-footer">
+                            <p class="form-note">Your email will not be published. All comments are moderated.</p>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Post Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Comments List -->
+                <div class="comments-list" id="commentsList">
+                    <!-- Comments will be loaded dynamically -->
+                </div>
+
+                <!-- Load More Comments -->
+                <div class="load-more-container">
+                    <button class="btn btn-outline" id="loadMoreComments">
+                        <i class="fas fa-sync"></i> Load More Comments
+                    </button>
+                </div>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="related-articles">
+                <h2>Continue Reading</h2>
+                <div class="related-grid" id="relatedArticles">
+                    <!-- Related articles will be loaded dynamically -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Table of Contents Sidebar -->
+        <aside class="toc-sidebar" id="tocSidebar">
+            <div class="toc-header">
+                <h3><i class="fas fa-list"></i> Contents</h3>
+                <button class="toc-toggle" id="tocToggle">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="toc-nav" id="tocNav">
+                <!-- Table of contents will be loaded dynamically -->
+            </nav>
+            <div class="toc-footer">
+                <div class="reading-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="readingTime">0 min read</span>
+                </div>
+                <button class="btn btn-sm btn-outline" id="tocShareBtn">
+                    <i class="fas fa-share"></i> Share
+                </button>
+            </div>
+        </aside>
+
+        <!-- Mobile Table of Contents Toggle -->
+        <button class="toc-mobile-toggle" id="tocMobileToggle">
+            <i class="fas fa-list"></i> Contents
+        </button>
+    </div>
+
+    <!-- Newsletter Modal -->
+    <div class="modal" id="readingCompleteModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeReadingModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <div class="modal-icon success">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>Great Job!</h3>
+                <p>You've completed this article. Want more career insights?</p>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="subscribeAfterRead">
+                        <i class="fas fa-envelope"></i> Get More Insights
+                    </button>
+                    <button class="btn btn-outline" id="exploreMoreBtn">
+                        <i class="fas fa-compass"></i> Explore More Articles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeShareModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <h3>Share This Article</h3>
+                <div class="share-options">
+                    <button class="share-option" data-platform="twitter">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </button>
+                    <button class="share-option" data-platform="linkedin">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </button>
+                    <button class="share-option" data-platform="facebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </button>
+                    <button class="share-option" data-platform="whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="share-option" data-platform="copy">
+                        <i class="fas fa-link"></i> Copy Link
+                    </button>
+                </div>
+                <div class="share-link">
+                    <input type="text" id="shareUrl" readonly>
+                    <button class="btn btn-sm" id="copyUrlBtn">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <img src="../assets/zawadi-logo.png" alt="Zawadi Careers" class="footer-logo">
+                        <h3>Zawadi Careers</h3>
+                    </div>
+                    <p>From potential to productivity.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>More Resources</h4>
+                    <ul>
+                        <li><a href="#">Career Guides</a></li>
+                        <li><a href="#">Skill Assessments</a></li>
+                        <li><a href="#">Job Alerts</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html" class="mobile-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="blog.html" class="mobile-nav-item">
+            <i class="fas fa-newspaper"></i>
+            <span>Blog</span>
+        </a>
+        <button class="mobile-nav-item" id="mobileTocBtn">
+            <i class="fas fa-list"></i>
+            <span>Contents</span>
+        </button>
+        <a href="#comments" class="mobile-nav-item">
+            <i class="fas fa-comment"></i>
+            <span>Comments</span>
+        </a>
+        <button class="mobile-nav-item" id="mobileShareBtn">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/supabase.js"></script>
+    <script src="../js/blog.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const blogId = new URLSearchParams(window.location.search).get('id');
+            if (blogId) {
+                initBlogDetailPage(blogId);
+            } else {
+                window.location.href = 'blog.html';
+            }
+        });
+    </script>
+</body>
+</html>

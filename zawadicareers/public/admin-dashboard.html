@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Zawadi Careers</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../assets/zawadi-logo.png">
+</head>
+<body>
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <img src="../assets/zawadi-logo.png" alt="Zawadi Careers" class="admin-logo">
+            <h2>Zawadi Admin</h2>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <h3>Dashboard</h3>
+                <a href="admin-dashboard.html" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <h3>Content Management</h3>
+                <a href="admin-blog-editor.html" class="nav-link">
+                    <i class="fas fa-edit"></i> Write Blog
+                </a>
+                <a href="#" class="nav-link" id="manageBlogsBtn">
+                    <i class="fas fa-newspaper"></i> Manage Blogs
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-th-large"></i> Categories
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <h3>Community</h3>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-comments"></i> Comments
+                    <span class="badge" id="pendingComments">0</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i> Subscribers
+                    <span class="badge" id="subscribersCount">0</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <h3>Analytics</h3>
+                <a href="admin-analytics.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Traffic
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <h3>Settings</h3>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i> Site Settings
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-cog"></i> Admin Users
+                </a>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=1a73e8&color=fff" alt="Admin">
+                <div class="profile-info">
+                    <strong id="adminName">Admin User</strong>
+                    <span id="adminRole">Administrator</span>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Top Bar -->
+        <header class="admin-topbar">
+            <div class="topbar-left">
+                <h1>Dashboard Overview</h1>
+                <p id="currentDate">Loading...</p>
+            </div>
+            <div class="topbar-right">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </div>
+                <div class="quick-actions">
+                    <button class="btn btn-primary" id="quickBlogBtn">
+                        <i class="fas fa-plus"></i> New Blog
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-overview">
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalBlogs">0</h3>
+                        <p>Total Blogs</p>
+                        <span class="stat-change" id="blogChange">+0 this week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalViews">0</h3>
+                        <p>Total Views</p>
+                        <span class="stat-change" id="viewChange">+0 today</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalComments">0</h3>
+                        <p>Total Comments</p>
+                        <span class="stat-change" id="commentChange">+0 pending</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalSubscribers">0</h3>
+                        <p>Subscribers</p>
+                        <span class="stat-change" id="subscriberChange">+0 new</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity & Popular Blogs -->
+        <section class="dashboard-content">
+            <div class="content-grid">
+                <!-- Recent Blogs -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>Recent Blogs</h3>
+                        <a href="#" class="card-action">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Views</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentBlogsTable">
+                                    <!-- Recent blogs will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Blogs -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>Popular This Week</h3>
+                        <a href="#" class="card-action">See More</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="popular-list" id="popularBlogsList">
+                            <!-- Popular blogs will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Comments -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>Recent Comments</h3>
+                        <a href="#" class="card-action">Moderate All</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="comments-list" id="recentComments">
+                            <!-- Recent comments will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>Quick Stats</h3>
+                        <span class="stat-period">Last 7 days</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-stats">
+                            <div class="quick-stat">
+                                <span class="stat-label">Avg. Read Time</span>
+                                <span class="stat-value" id="avgReadTime">0 min</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="stat-label">Completion Rate</span>
+                                <span class="stat-value" id="completionRate">0%</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="stat-label">Bounce Rate</span>
+                                <span class="stat-value" id="bounceRate">0%</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="stat-label">Top Category</span>
+                                <span class="stat-value" id="topCategory">-</span>
+                            </div>
+                        </div>
+                        <div class="chart-placeholder">
+                            <canvas id="trafficChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Section -->
+        <section class="dashboard-bottom">
+            <div class="content-grid">
+                <!-- To Do -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>To Do List</h3>
+                        <button class="btn btn-sm" id="addTodoBtn">+ Add</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="todo-list" id="todoList">
+                            <div class="todo-item">
+                                <input type="checkbox" id="todo1">
+                                <label for="todo1">Review pending comments</label>
+                            </div>
+                            <div class="todo-item">
+                                <input type="checkbox" id="todo2">
+                                <label for="todo2">Publish weekly newsletter</label>
+                            </div>
+                            <div class="todo-item">
+                                <input type="checkbox" id="todo3">
+                                <label for="todo3">Update career guides</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Subscribers -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>Recent Subscribers</h3>
+                        <a href="#" class="card-action">Export</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="subscribers-list" id="recentSubscribers">
+                            <!-- Recent subscribers will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initAdminDashboard();
+        });
+    </script>
+</body>
+</html>
