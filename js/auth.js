@@ -102,7 +102,7 @@ const authenticateAdmin = async (email, password) => {
         // This is a simplified version for demo purposes
         
         // Fetch admin user from database
-        const { data: admin, error } = await supabase
+        const { data: admin, error } = await supabaseClient
             .from('admin_users')
             .select('*')
             .eq('email', email)
@@ -121,7 +121,7 @@ const authenticateAdmin = async (email, password) => {
         
         // IMPORTANT: This is for demo purposes only
         // In a real application, use Supabase Auth or proper password hashing
-        const { data: authCheck, error: authError } = await supabase.rpc(
+        const { data: authCheck, error: authError } = await supabaseClient.rpc(
             'verify_admin_password',
             {
                 p_email: email,
@@ -136,7 +136,7 @@ const authenticateAdmin = async (email, password) => {
         
         if (authCheck && authCheck.is_valid) {
             // Update last login
-            await supabase
+            await supabaseClient
                 .from('admin_users')
                 .update({ last_login: new Date().toISOString() })
                 .eq('id', admin.id);
@@ -172,7 +172,7 @@ const createInitialAdmin = async () => {
     };
   
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('admin_users')
             .insert([adminData])
             .select()
@@ -225,11 +225,3 @@ const checkPasswordStrength = (password) => {
 window.initAdminLogin = initAdminLogin;
 window.createInitialAdmin = createInitialAdmin;
 window.checkPasswordStrength = checkPasswordStrength;
-
-// Note: In a production environment, you should:
-// 1. Use Supabase Auth for authentication
-// 2. Implement proper password hashing
-// 3. Add rate limiting
-// 4. Implement 2FA for admin accounts
-// 5. Use secure session management
-// 6. Implement proper logging and monitoring
