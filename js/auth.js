@@ -5,7 +5,7 @@ const initAdminLogin = () => {
     console.log('Initializing admin login...');
     
     // Check if already logged in
-    if (SessionManager.isAdminLoggedIn()) {
+    if (SessionManager && SessionManager.isAdminLoggedIn()) {
         window.location.href = 'admin-dashboard.html';
         return;
     }
@@ -20,7 +20,10 @@ const setupLoginForm = () => {
     const loginBtn = document.getElementById('loginBtn');
     const errorMessage = document.getElementById('errorMessage');
     
-    if (!loginForm || !loginBtn) return;
+    if (!loginForm || !loginBtn) {
+        console.error('Login form elements not found');
+        return;
+    }
     
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -35,7 +38,7 @@ const setupLoginForm = () => {
             return;
         }
         
-        if (!SupabaseUtils.validateEmail(email)) {
+        if (!window.SupabaseUtils || !window.SupabaseUtils.validateEmail(email)) {
             showError('Please enter a valid email address');
             return;
         }
@@ -95,87 +98,96 @@ const setupLoginForm = () => {
     });
 };
 
-        const authenticateAdmin = async (email, password) => {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
-        
-            if (error) {
-                console.error(error);
-                return null;
-            }
-        
-            return {
-                id: data.user.id,
-                email: data.user.email
-            };
-        };
-
-        
-        // In production, use proper password hashing (bcrypt, etc.)
-        // For this demo, we're using a simple check
-        // In reality, you should NEVER store plain text passwords
-        
-        // IMPORTANT: This is for demo purposes only
-        // In a real application, use Supabase Auth or proper password hashing
-        const { data: authCheck, error: authError } = await supabaseClient.rpc(
-            'verify_admin_password',
-            {
-                p_email: email,
-                p_password: password
-            }
-        );
-        
-        if (authError) {
-            console.error('Auth check error:', authError);
-            return null;
+// Authenticate Admin using Supabase Auth
+const authenticateAdmin = async (email, password) => {
+    try {
+        if (!window.supabaseClient) {
+            throw new Error('Supabase client not initialized');
         }
         
-        if (authCheck && authCheck.is_valid) {
-            // Update last login
-            await supabaseClient
-                .from('admin_users')
-                .update({ last_login: new Date().toISOString() })
-                .eq('id', admin.id);
-            
-            // Return admin data (excluding password)
+        // Use Supabase Auth for authentication
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            console.error('Authentication error:', error);
+            return null;
+        }
+
+        if (data && data.user) {
             return {
-                id: admin.id,
-                email: admin.email,
-                full_name: admin.full_name,
-                role: admin.role
+                id: data.user.id,
+                email: data.user.email,
+                access_token: data.session.access_token
             };
         }
         
         return null;
-        
     } catch (error) {
         console.error('Authentication error:', error);
         return null;
     }
 };
 
+// Show notification function (for success messages)
+const showNotification = (message, type = 'info') => {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? '#4caf50' : '#2196f3'};
+        color: white;
+        border-radius: 5px;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 3000);
+};
+
 // Create Admin User (Initial Setup)
-// This should only be run once to create the first admin user
-const createInitialAdmin = async () => {
-    // This function should be called manually from browser console
-    // during initial setup
-  
-    const adminData = {
-        email: 'admin@zawadicareers.com',
-        password_hash: 'hashed_password_here', // Use proper hashing in production
-        full_name: 'System Administrator',
-        role: 'super_admin'
-    };
-  
+const createInitialAdmin = async (email, password, fullName) => {
     try {
-        const { data, error } = await supabaseClient
-            .from('admin_users')
-            .insert([adminData])
-            .select()
-            .single();
+        if (!window.supabaseClient) {
+            throw new Error('Supabase client not initialized');
+        }
         
+        // Create user with Supabase Auth
+        const { data, error } = await window.supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    full_name: fullName,
+                    role: 'super_admin'
+                }
+            }
+        });
+
         if (error) throw error;
         
         console.log('Initial admin created:', data);
@@ -186,7 +198,7 @@ const createInitialAdmin = async () => {
     }
 };
 
-// Password Strength Checker (for admin password changes)
+// Password Strength Checker
 const checkPasswordStrength = (password) => {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -219,8 +231,9 @@ const checkPasswordStrength = (password) => {
     };
 };
 
-// Export functions
+// Make functions globally available
 window.initAdminLogin = initAdminLogin;
+window.authenticateAdmin = authenticateAdmin;
 window.createInitialAdmin = createInitialAdmin;
 window.checkPasswordStrength = checkPasswordStrength;
-
+window.showNotification = showNotification;
