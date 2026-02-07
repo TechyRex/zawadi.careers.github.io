@@ -95,25 +95,23 @@ const setupLoginForm = () => {
     });
 };
 
-// Authenticate Admin
-const authenticateAdmin = async (email, password) => {
-    try {
-        // Note: In production, you should use Supabase Auth for authentication
-        // This is a simplified version for demo purposes
+        const authenticateAdmin = async (email, password) => {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
         
-        // Fetch admin user from database
-        const { data: admin, error } = await supabaseClient
-            .from('admin_users')
-            .select('*')
-            .eq('email', email)
-            .eq('is_active', true)
-            .single();
+            if (error) {
+                console.error(error);
+                return null;
+            }
         
-        if (error) {
-            // No admin found or other error
-            console.error('Admin fetch error:', error);
-            return null;
-        }
+            return {
+                id: data.user.id,
+                email: data.user.email
+            };
+        };
+
         
         // In production, use proper password hashing (bcrypt, etc.)
         // For this demo, we're using a simple check
@@ -225,3 +223,4 @@ const checkPasswordStrength = (password) => {
 window.initAdminLogin = initAdminLogin;
 window.createInitialAdmin = createInitialAdmin;
 window.checkPasswordStrength = checkPasswordStrength;
+
