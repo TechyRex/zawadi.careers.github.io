@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Zawadi Careers</title>
-    <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../assets/zawadi-logo.png">
     
     <style>
-        /* ... keep all your existing styles ... */
-        .admin-login-page {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
             background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
             display: flex;
@@ -20,138 +24,229 @@
             padding: 20px;
         }
         
-        /* ... all your other styles remain the same ... */
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background: #1a73e8;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            font-size: 24px;
+            margin: 15px 0 5px 0;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            opacity: 0.9;
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-btn:hover:not(:disabled) {
+            background: #0d47a1;
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .login-footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .security-notice {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
         
         .security-notice i {
             color: #1a73e8;
             margin-right: 8px;
         }
         
-        /* Add notification styles */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background: #4caf50;
-            color: white;
-            border-radius: 5px;
-            z-index: 1000;
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 8px;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            min-width: 300px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .notification.error {
-            background: #f44336;
-        }
-        
-        .notification.warning {
-            background: #ff9800;
-        }
-        
-        .notification.info {
-            background: #2196f3;
-        }
-        
-        .notification button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            margin-left: 15px;
+            justify-content: center;
+            font-size: 24px;
+            color: #1a73e8;
         }
     </style>
 </head>
 <body>
-    <div class="admin-login-page">
-        <div class="login-container">
-            <div class="login-header">
-                <!-- Fix image path - adjust according to your actual structure -->
-                <img src="assets/zawadi-logo.png" alt="Zawadi Careers">
-                <h1>Admin Dashboard</h1>
-                <p>Zawadi Careers Content Management</p>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo-placeholder">
+                <i class="fas fa-briefcase"></i>
+            </div>
+            <h1>Admin Dashboard</h1>
+            <p>Zawadi Careers Content Management</p>
+        </div>
+        
+        <div class="login-body">
+            <div class="error-message" id="errorMessage">
+                Invalid credentials. Please try again.
             </div>
             
-            <div class="login-body">
-                <div class="error-message" id="errorMessage">
-                    Invalid credentials. Please try again.
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">
+                        <i class="fas fa-envelope"></i> Admin Email
+                    </label>
+                    <input 
+                        type="email" 
+                        id="adminEmail" 
+                        class="form-control" 
+                        placeholder="admin@zawadicareers.com"
+                        required
+                    >
                 </div>
                 
-                <form id="adminLoginForm">
-                    <div class="form-group">
-                        <label for="adminEmail">
-                            <i class="fas fa-envelope"></i> Admin Email
-                        </label>
-                        <input 
-                            type="email" 
-                            id="adminEmail" 
-                            class="form-control" 
-                            placeholder="admin@zawadicareers.com"
-                            required
-                            value="admin@zawadicareers.com" <!-- For testing -->
-                        >
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="adminPassword">
-                            <i class="fas fa-lock"></i> Password
-                        </label>
-                        <input 
-                            type="password" 
-                            id="adminPassword" 
-                            class="form-control" 
-                            placeholder="••••••••"
-                            required
-                            value="admin123" <!-- For testing - remove in production -->
-                        >
-                    </div>
-                    
-                    <div class="form-group">
-                        <button type="submit" class="login-btn" id="loginBtn">
-                            <i class="fas fa-sign-in-alt"></i> Sign In
-                        </button>
-                    </div>
-                </form>
-                
-                <div class="security-notice">
-                    <p><i class="fas fa-shield-alt"></i> This is a restricted access area. All activities are logged and monitored.</p>
+                <div class="form-group">
+                    <label for="adminPassword">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="adminPassword" 
+                        class="form-control" 
+                        placeholder="••••••••"
+                        required
+                    >
                 </div>
-            </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </div>
+            </form>
             
-            <div class="login-footer">
-                <p>Zawadi Careers Admin Portal v1.0</p>
+            <div class="security-notice">
+                <p><i class="fas fa-shield-alt"></i> This is a restricted access area. All activities are logged and monitored.</p>
             </div>
+        </div>
+        
+        <div class="login-footer">
+            <p>Zawadi Careers Admin Portal v1.0</p>
         </div>
     </div>
 
-    <!-- Load Supabase first -->
+    <!-- Load Supabase from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- Load your scripts in correct order -->
-    <script src="../js/supabase.js"></script>
-    <script src="../js/auth.js"></script>
+    <!-- Load your scripts with CORRECT PATHS -->
+    <!-- From public/admin-login.html to css/js/ -->
+    <script src="../css/js/supabase.js"></script>
+    <script src="../css/js/auth.js"></script>
     
     <script>
-        // Wait for everything to load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if all required components are loaded
+        // Debug script loading
+        console.log('DOM loaded, checking scripts...');
+        
+        // Create a function to check if scripts loaded
+        function checkAndInitialize() {
+            console.log('Checking for initAdminLogin...');
+            console.log('window.supabaseClient:', window.supabaseClient);
+            console.log('window.SessionManager:', window.SessionManager);
+            console.log('window.initAdminLogin:', window.initAdminLogin);
+            
             if (typeof initAdminLogin === 'function') {
+                console.log('initAdminLogin found, initializing...');
                 initAdminLogin();
             } else {
-                console.error('initAdminLogin function not found. Check script loading order.');
-                // Try to initialize after a short delay
-                setTimeout(function() {
-                    if (typeof initAdminLogin === 'function') {
-                        initAdminLogin();
-                    } else {
-                        alert('System initialization failed. Please refresh the page.');
-                    }
-                }, 1000);
+                console.error('initAdminLogin not found yet');
+                // Try again in 500ms
+                setTimeout(checkAndInitialize, 500);
             }
+        }
+        
+        // Start checking when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded fired');
+            // Wait a bit for scripts to load
+            setTimeout(checkAndInitialize, 300);
+        });
+        
+        // Also check when window loads
+        window.addEventListener('load', function() {
+            console.log('Window loaded');
+            checkAndInitialize();
         });
     </script>
 </body>
