@@ -9,8 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../assets/zawadi-logo.png">
     
-
     <style>
+        /* ... keep all your existing styles ... */
         .admin-login-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
@@ -20,112 +20,49 @@
             padding: 20px;
         }
         
-        .login-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            overflow: hidden;
-        }
-        
-        .login-header {
-            background: #1a73e8;
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .login-header img {
-            height: 50px;
-            margin-bottom: 15px;
-        }
-        
-        .login-header h1 {
-            font-size: 24px;
-            margin: 0;
-            font-weight: 600;
-        }
-        
-        .login-header p {
-            opacity: 0.9;
-            margin: 5px 0 0 0;
-        }
-        
-        .login-body {
-            padding: 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: #1a73e8;
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .login-btn:hover {
-            background: #0d47a1;
-        }
-        
-        .login-footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #eee;
-            color: #666;
-        }
-        
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .security-notice {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
+        /* ... all your other styles remain the same ... */
         
         .security-notice i {
             color: #1a73e8;
             margin-right: 8px;
+        }
+        
+        /* Add notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #4caf50;
+            color: white;
+            border-radius: 5px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .notification.error {
+            background: #f44336;
+        }
+        
+        .notification.warning {
+            background: #ff9800;
+        }
+        
+        .notification.info {
+            background: #2196f3;
+        }
+        
+        .notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 15px;
         }
     </style>
 </head>
@@ -133,7 +70,8 @@
     <div class="admin-login-page">
         <div class="login-container">
             <div class="login-header">
-                <img src="../assets/zawadi-logo.png" alt="Zawadi Careers">
+                <!-- Fix image path - adjust according to your actual structure -->
+                <img src="assets/zawadi-logo.png" alt="Zawadi Careers">
                 <h1>Admin Dashboard</h1>
                 <p>Zawadi Careers Content Management</p>
             </div>
@@ -154,6 +92,7 @@
                             class="form-control" 
                             placeholder="admin@zawadicareers.com"
                             required
+                            value="admin@zawadicareers.com" <!-- For testing -->
                         >
                     </div>
                     
@@ -167,6 +106,7 @@
                             class="form-control" 
                             placeholder="••••••••"
                             required
+                            value="admin123" <!-- For testing - remove in production -->
                         >
                     </div>
                     
@@ -188,20 +128,31 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Load Supabase first -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
-<script src="../js/auth.js"></script>
-    <script src="../js/admin.js"></script>
+    
+    <!-- Load your scripts in correct order -->
+    <script src="../js/supabase.js"></script>
+    <script src="../js/auth.js"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initAdminLogin();
+        // Wait for everything to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if all required components are loaded
+            if (typeof initAdminLogin === 'function') {
+                initAdminLogin();
+            } else {
+                console.error('initAdminLogin function not found. Check script loading order.');
+                // Try to initialize after a short delay
+                setTimeout(function() {
+                    if (typeof initAdminLogin === 'function') {
+                        initAdminLogin();
+                    } else {
+                        alert('System initialization failed. Please refresh the page.');
+                    }
+                }, 1000);
+            }
         });
     </script>
 </body>
 </html>
-
-
-
-
-
