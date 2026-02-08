@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Title - Zawadi Careers</title>
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+</head>
+<body>
+    <!-- Navigation (Same as index.html) -->
+    <nav class="navbar">
+        <!-- Same navigation as index.html -->
+    </nav>
+
+    <!-- Blog Detail Container -->
+    <div class="blog-detail-container" id="blogDetailContainer">
+        <!-- Blog content will be loaded here dynamically -->
+        
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-content">
+                <div class="loader"></div>
+                <p>Loading article...</p>
+            </div>
+        </div>
+        
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <div class="error-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Article Not Found</h3>
+                <p>The article you're looking for doesn't exist or has been moved.</p>
+                <a href="blog.html" class="btn-primary">Back to Blog</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-info">
+            <span id="currentPage">1</span> of <span id="totalPages">1</span>
+        </div>
+    </div>
+
+    <!-- Reading Navigation -->
+    <div class="reading-navigation">
+        <button class="nav-btn prev-btn" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+            <span>Previous</span>
+        </button>
+        
+        <div class="reading-stats">
+            <div class="stat-item">
+                <i class="fas fa-clock"></i>
+                <span id="readingTime">5 min</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-eye"></i>
+                <span id="viewCount">0</span>
+            </div>
+            <button class="like-btn" id="likeBtn">
+                <i class="far fa-heart"></i>
+                <span id="likeCount">0</span>
+            </button>
+        </div>
+        
+        <button class="nav-btn next-btn" id="nextBtn">
+            <span>Next</span>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Quick Actions -->
+    <div class="mobile-quick-actions">
+        <button class="quick-action" id="mobileLikeBtn">
+            <i class="far fa-heart"></i>
+            <span>Like</span>
+        </button>
+        <button class="quick-action" id="mobileShareBtn">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+        </button>
+        <button class="quick-action" id="mobileSaveBtn">
+            <i class="far fa-bookmark"></i>
+            <span>Save</span>
+        </button>
+        <button class="quick-action" id="mobileCommentBtn">
+            <i class="far fa-comment"></i>
+            <span>Comment</span>
+        </button>
+    </div>
+
+    <!-- Comments Section -->
+    <section class="comments-section" id="commentsSection">
+        <div class="container">
+            <div class="comments-header">
+                <h2><i class="fas fa-comments"></i> Discussion</h2>
+                <div class="comments-stats">
+                    <span id="commentsCount">0 Comments</span>
+                    <button class="btn-refresh-comments" id="refreshComments">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Comment Form -->
+            <div class="comment-form-container">
+                <h3>Share Your Thoughts</h3>
+                <p>You can comment without creating an account</p>
+                <form id="commentForm" class="comment-form">
+                    <div class="commenter-info">
+                        <input type="text" id="commenterName" placeholder="Your Name" required>
+                        <input type="email" id="commenterEmail" placeholder="Your Email (optional)">
+                    </div>
+                    <textarea id="commentContent" placeholder="Share your perspective, ask questions, or add insights..." required></textarea>
+                    <div class="comment-form-actions">
+                        <button type="submit" class="btn-submit-comment">
+                            <i class="fas fa-paper-plane"></i> Post Comment
+                        </button>
+                        <div class="comment-guidelines">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Be respectful and constructive</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Comments List -->
+            <div class="comments-list" id="commentsList">
+                <!-- Comments will be loaded here -->
+                <div class="no-comments" id="noComments">
+                    <i class="far fa-comment-dots"></i>
+                    <h3>No comments yet</h3>
+                    <p>Be the first to share your thoughts!</p>
+                </div>
+            </div>
+            
+            <!-- Load More Comments -->
+            <div class="load-more-comments" id="loadMoreComments" style="display: none;">
+                <button class="btn-load-more" id="loadMoreBtn">
+                    <i class="fas fa-spinner fa-spin" id="loadingSpinner" style="display: none;"></i>
+                    Load More Comments
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Articles -->
+    <section class="related-articles">
+        <div class="container">
+            <h2><i class="fas fa-link"></i> Related Articles</h2>
+            <div class="related-grid" id="relatedArticles">
+                <!-- Related articles will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Prompt -->
+    <div class="newsletter-prompt" id="newsletterPrompt">
+        <div class="prompt-content">
+            <button class="close-prompt">&times;</button>
+            <div class="prompt-icon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <h3>Enjoying this article?</h3>
+            <p>Subscribe to get more career insights like this delivered to your inbox weekly.</p>
+            <form class="prompt-newsletter-form">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer (Same as index.html) -->
+    <footer class="footer">
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-icon">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="blog.html" class="nav-icon">
+            <i class="fas fa-blog"></i>
+            <span>Blog</span>
+        </a>
+        <a href="#" class="nav-icon" id="detailSaveBtn">
+            <i class="far fa-bookmark"></i>
+            <span>Save</span>
+        </a>
+        <button class="nav-icon" id="detailCommentTrigger">
+            <i class="far fa-comment"></i>
+            <span>Comment</span>
+        </button>
+        <button class="nav-icon" id="detailShareBtn">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+        </button>
+    </div>
+
+    <script src="js/supabase.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/blog.js" type="module"></script>
+    <script type="module">
+        // Get blog ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const blogId = urlParams.get('id');
+        
+        if (blogId) {
+            // Load blog content
+            import('./js/blog.js').then(module => {
+                module.loadBlogDetail(blogId);
+            });
+        } else {
+            document.getElementById('errorState').style.display = 'flex';
+            document.getElementById('loadingState').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zawadi Careers - African Career Development Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+</head>
+<body>
+    <!-- Newsletter Popup -->
+    <div id="newsletterPopup" class="newsletter-popup">
+        <div class="popup-content">
+            <button class="close-popup">&times;</button>
+            <div class="popup-header">
+                <img src="assets/images/zawadi-logo.png" alt="Zawadi Logo" class="popup-logo">
+                <h3>Stay Updated with Career Opportunities!</h3>
+            </div>
+            <p>Subscribe to our newsletter for:</p>
+            <ul>
+                <li><i class="fas fa-check"></i> Latest job openings in Africa</li>
+                <li><i class="fas fa-check"></i> Career development tips</li>
+                <li><i class="fas fa-check"></i> Skill-building resources</li>
+                <li><i class="fas fa-check"></i> Industry insights</li>
+            </ul>
+            <form id="newsletterForm" class="newsletter-form">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit" class="btn-subscribe">Subscribe Now</button>
+            </form>
+            <p class="privacy-note">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/zawadi-logo.png" alt="Zawadi Careers">
+                <span>Zawadi Careers</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link"><i class="fas fa-th-large"></i> Categories</a>
+                    <div class="dropdown-content">
+                        <a href="categories.html?category=career-clarity">Career Clarity</a>
+                        <a href="categories.html?category=skill-development">Skill Development</a>
+                        <a href="categories.html?category=job-search">Job Search</a>
+                        <a href="categories.html?category=opportunities">Opportunities</a>
+                        <a href="categories.html?category=professionals">Professionals</a>
+                        <a href="categories.html?category=companies">Companies</a>
+                        <a href="categories.html?category=stories">Stories & Insights</a>
+                    </div>
+                </div>
+                <a href="blog.html" class="nav-link"><i class="fas fa-blog"></i> Blog</a>
+                <a href="#" class="nav-link"><i class="fas fa-briefcase"></i> Jobs</a>
+                <a href="#" class="nav-link"><i class="fas fa-graduation-cap"></i> Learning</a>
+                <a href="#" class="nav-link"><i class="fas fa-users"></i> Mentorship</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn-subscribe-nav" id="subscribeBtn">
+                    <i class="fas fa-envelope"></i> Subscribe
+                </button>
+                <a href="admin-login.html" class="admin-link">
+                    <i class="fas fa-user-cog"></i> Admin
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <img src="assets/images/zawadi-logo.png" alt="Zawadi Logo">
+                <button class="close-mobile-menu">&times;</button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="index.html" class="mobile-nav-link active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="blog.html" class="mobile-nav-link">
+                    <i class="fas fa-blog"></i> Blog
+                </a>
+                <a href="categories.html" class="mobile-nav-link">
+                    <i class="fas fa-th-large"></i> Categories
+                </a>
+                <a href="#" class="mobile-nav-link">
+                    <i class="fas fa-briefcase"></i> Jobs
+                </a>
+                <a href="#" class="mobile-nav-link">
+                    <i class="fas fa-graduation-cap"></i> Learning
+                </a>
+                <a href="#" class="mobile-nav-link">
+                    <i class="fas fa-users"></i> Mentorship
+                </a>
+                <button class="mobile-subscribe-btn" id="mobileSubscribeBtn">
+                    <i class="fas fa-envelope"></i> Subscribe to Newsletter
+                </button>
+                <a href="admin-login.html" class="mobile-admin-link">
+                    <i class="fas fa-user-cog"></i> Admin Panel
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>From Potential to Productivity</h1>
+            <p class="hero-subtitle">Discover your gifts, develop in-demand skills, and connect to meaningful career opportunities across Africa.</p>
+            <div class="hero-buttons">
+                <a href="blog.html" class="btn-primary">Explore Blog</a>
+                <a href="#" class="btn-secondary">Browse Opportunities</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-count="5000">0</span>
+                    <span class="stat-label">Career Resources</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="1000">0</span>
+                    <span class="stat-label">Opportunities</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="25000">0</span>
+                    <span class="stat-label">Subscribers</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-elements">
+                <div class="floating-element element-1">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Career Clarity</span>
+                </div>
+                <div class="floating-element element-2">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Skill Development</span>
+                </div>
+                <div class="floating-element element-3">
+                    <i class="fas fa-handshake"></i>
+                    <span>Opportunities</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="categories-section">
+        <div class="section-header">
+            <h2>Explore Career Resources</h2>
+            <p>Structured content organized by career stages and needs</p>
+        </div>
+        
+        <div class="categories-grid">
+            <a href="categories.html?category=career-clarity" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Career Clarity & Exploration</h3>
+                <p>Understand career paths and industry insights</p>
+                <span class="category-count">45 Articles</span>
+            </a>
+            
+            <a href="categories.html?category=skill-development" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3>Skill Development</h3>
+                <p>Learn in-demand skills with practical guides</p>
+                <span class="category-count">78 Articles</span>
+            </a>
+            
+            <a href="categories.html?category=job-search" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3>Job Search & Advancement</h3>
+                <p>CV guidance, interviews, and career switching</p>
+                <span class="category-count">62 Articles</span>
+            </a>
+            
+            <a href="categories.html?category=opportunities" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3>Opportunities & Openings</h3>
+                <p>Job listings, internships, and company spotlights</p>
+                <span class="category-count">120+ Listings</span>
+            </a>
+            
+            <a href="categories.html?category=professionals" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3>Professionals & Leadership</h3>
+                <p>Career progression and leadership development</p>
+                <span class="category-count">54 Articles</span>
+            </a>
+            
+            <a href="categories.html?category=stories" class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Stories & Insights</h3>
+                <p>Real career journeys and mentorship advice</p>
+                <span class="category-count">89 Stories</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Blogs -->
+    <section class="featured-blogs">
+        <div class="section-header">
+            <h2>Latest Career Insights</h2>
+            <p>Fresh perspectives and practical guidance for your career journey</p>
+        </div>
+        
+        <div class="blogs-container">
+            <div class="featured-blog-main">
+                <!-- Featured blog will be loaded here -->
+            </div>
+            
+            <div class="blogs-grid" id="blogsGrid">
+                <!-- Blogs will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="view-all">
+            <a href="blog.html" class="btn-view-all">View All Articles <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="newsletter-container">
+            <div class="newsletter-content">
+                <h2>Never Miss an Opportunity</h2>
+                <p>Subscribe to get weekly career insights, job openings, and skill development resources directly in your inbox.</p>
+                <ul class="newsletter-benefits">
+                    <li><i class="fas fa-check-circle"></i> Curated job opportunities</li>
+                    <li><i class="fas fa-check-circle"></i> Exclusive career guides</li>
+                    <li><i class="fas fa-check-circle"></i> Industry trend updates</li>
+                    <li><i class="fas fa-check-circle"></i> Free learning resources</li>
+                </ul>
+            </div>
+            <div class="newsletter-form-container">
+                <form id="mainNewsletterForm" class="main-newsletter-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <select>
+                            <option value="">Interested in...</option>
+                            <option value="jobs">Job Opportunities</option>
+                            <option value="skills">Skill Development</option>
+                            <option value="career">Career Guidance</option>
+                            <option value="all">All Updates</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-newsletter">
+                        <i class="fas fa-paper-plane"></i> Subscribe Now
+                    </button>
+                    <p class="form-note">We respect your privacy. No spam ever.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="footer-logo">
+                    <img src="assets/images/zawadi-logo.png" alt="Zawadi Careers">
+                    <span>Zawadi Careers</span>
+                </a>
+                <p class="footer-tagline">Bridging the gap between talent and opportunity in Africa</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="blog.html">Career Blog</a>
+                    <a href="#">Learning Paths</a>
+                    <a href="#">Industry Guides</a>
+                    <a href="#">CV Templates</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Opportunities</h4>
+                    <a href="#">Job Board</a>
+                    <a href="#">Internships</a>
+                    <a href="#">Graduate Programs</a>
+                    <a href="#">Remote Work</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Partnerships</a>
+                    <a href="admin-login.html">Admin</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Zawadi Careers. All rights reserved. Empowering African talent.</p>
+            <div class="footer-bottom-links">
+                <a href="#"><i class="fas fa-envelope"></i> contact@zawadicareers.com</a>
+                <a href="#"><i class="fas fa-phone"></i> +254 700 000 000</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation Icons (Bottom Navigation) -->
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-icon active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="blog.html" class="nav-icon">
+            <i class="fas fa-blog"></i>
+            <span>Blog</span>
+        </a>
+        <a href="categories.html" class="nav-icon">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="#" class="nav-icon" id="mobileJobsBtn">
+            <i class="fas fa-briefcase"></i>
+            <span>Jobs</span>
+        </a>
+        <a href="#" class="nav-icon" id="mobileSubscribeIcon">
+            <i class="fas fa-envelope"></i>
+            <span>Subscribe</span>
+        </a>
+    </div>
+
+    <script src="js/supabase.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/blog.js" type="module"></script>
+</body>
+</html>

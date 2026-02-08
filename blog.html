@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Blog - Zawadi Careers</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+</head>
+<body>
+    <!-- Navigation (Same as index.html) -->
+    <nav class="navbar">
+        <!-- Same navigation as index.html -->
+    </nav>
+
+    <!-- Blog Header -->
+    <section class="blog-header">
+        <div class="container">
+            <h1>Career Development Blog</h1>
+            <p class="subtitle">Practical insights, guides, and stories to accelerate your African career journey</p>
+            
+            <!-- Add this after the blog-header section -->
+<div class="blog-wave-divider">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+    </svg>
+</div>
+
+<!-- Replace the category-filters section with this enhanced version -->
+<div class="category-filters-enhanced">
+    <div class="filter-scroll-container">
+        <div class="filter-pills">
+            <button class="filter-pill active" data-category="all">
+                <i class="fas fa-globe"></i>
+                <span>All Topics</span>
+            </button>
+            <button class="filter-pill" data-category="career-clarity">
+                <i class="fas fa-bullseye"></i>
+                <span>Career Clarity</span>
+            </button>
+            <button class="filter-pill" data-category="skill-development">
+                <i class="fas fa-rocket"></i>
+                <span>Skill Dev</span>
+            </button>
+            <button class="filter-pill" data-category="job-search">
+                <i class="fas fa-briefcase"></i>
+                <span>Job Search</span>
+            </button>
+            <button class="filter-pill" data-category="professionals">
+                <i class="fas fa-chart-line"></i>
+                <span>Professionals</span>
+            </button>
+            <button class="filter-pill" data-category="stories">
+                <i class="fas fa-book-open"></i>
+                <span>Stories</span>
+            </button>
+            <button class="filter-pill" data-category="opportunities">
+                <i class="fas fa-star"></i>
+                <span>Opportunities</span>
+            </button>
+            <button class="filter-pill" data-category="companies">
+                <i class="fas fa-building"></i>
+                <span>Companies</span>
+            </button>
+        </div>
+    </div>
+</div>
+            
+            <!-- Search Bar -->
+            <div class="blog-search">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="blogSearch" placeholder="Search career articles, tips, guides...">
+                    <button class="search-btn">Search</button>
+                </div>
+                <div class="search-options">
+                    <span>Sort by:</span>
+                    <select id="sortOptions">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="reading-time">Reading Time</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <section class="blog-content">
+        <div class="container">
+            <div class="blog-layout">
+                <!-- Main Blog Posts -->
+                <div class="blog-main">
+                    <div class="blog-posts" id="blogPosts">
+                        <!-- Blog posts will be loaded here -->
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination">
+                        <!-- Pagination will be generated here -->
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <aside class="blog-sidebar">
+                    <!-- Newsletter Widget -->
+                    <div class="sidebar-widget newsletter-widget">
+                        <h3><i class="fas fa-envelope"></i> Get Career Updates</h3>
+                        <p>Subscribe for weekly career tips and opportunity alerts</p>
+                        <form class="sidebar-newsletter-form">
+                            <input type="email" placeholder="Your email" required>
+                            <button type="submit">Subscribe</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Popular Posts -->
+                    <div class="sidebar-widget popular-widget">
+                        <h3><i class="fas fa-fire"></i> Popular Articles</h3>
+                        <div class="popular-posts" id="popularPosts">
+                            <!-- Popular posts will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget categories-widget">
+                        <h3><i class="fas fa-folder"></i> Categories</h3>
+                        <div class="category-list">
+                            <a href="categories.html?category=career-clarity" class="category-item">
+                                <span class="category-name">Career Clarity</span>
+                                <span class="category-count">45</span>
+                            </a>
+                            <a href="categories.html?category=skill-development" class="category-item">
+                                <span class="category-name">Skill Development</span>
+                                <span class="category-count">78</span>
+                            </a>
+                            <a href="categories.html?category=job-search" class="category-item">
+                                <span class="category-name">Job Search</span>
+                                <span class="category-count">62</span>
+                            </a>
+                            <a href="categories.html?category=opportunities" class="category-item">
+                                <span class="category-name">Opportunities</span>
+                                <span class="category-count">120+</span>
+                            </a>
+                            <a href="categories.html?category=professionals" class="category-item">
+                                <span class="category-name">Professionals</span>
+                                <span class="category-count">54</span>
+                            </a>
+                            <a href="categories.html?category=companies" class="category-item">
+                                <span class="category-name">Companies</span>
+                                <span class="category-count">36</span>
+                            </a>
+                            <a href="categories.html?category=stories" class="category-item">
+                                <span class="category-name">Stories & Insights</span>
+                                <span class="category-count">89</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Reading Time Calculator -->
+                    <div class="sidebar-widget reading-time-widget">
+                        <h3><i class="fas fa-clock"></i> Reading Time</h3>
+                        <div class="reading-time-info">
+                            <p>Average reading time per article: <strong>5-7 minutes</strong></p>
+                            <div class="time-indicators">
+                                <span class="time-indicator short">Short (1-3 min)</span>
+                                <span class="time-indicator medium">Medium (4-7 min)</span>
+                                <span class="time-indicator long">Long (8+ min)</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-icon">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="blog.html" class="nav-icon active">
+            <i class="fas fa-blog"></i>
+            <span>Blog</span>
+        </a>
+        <a href="categories.html" class="nav-icon">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="#" class="nav-icon">
+            <i class="fas fa-bookmark"></i>
+            <span>Saved</span>
+        </a>
+        <a href="#" class="nav-icon" id="blogSubscribeBtn">
+            <i class="fas fa-envelope"></i>
+            <span>Subscribe</span>
+        </a>
+    </div>
+
+    <!-- Footer (Same as index.html) -->
+    <footer class="footer">
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script src="js/supabase.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/blog.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Editor - Zawadi Careers Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+    <!-- Include Quill Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <style>
+        /* Additional styles for blog editor */
+        .editor-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-save-draft, .btn-publish {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-save-draft {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-publish {
+            background: linear-gradient(90deg, #0066cc 0%, #00b3ff 100%);
+            color: white;
+        }
+        
+        .btn-save-draft:hover {
+            background: #cbd5e0;
+        }
+        
+        .btn-publish:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+        }
+        
+        .editor-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        
+        .editor-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .editor-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+        
+        .title-input {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            border: none;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .title-input:focus {
+            border-color: #0066cc;
+            box-shadow: none;
+        }
+        
+        /* Quill Editor Customization */
+        .quill-editor {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .ql-toolbar {
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            border-color: #e2e8f0 !important;
+        }
+        
+        .ql-container {
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border-color: #e2e8f0 !important;
+            font-family: inherit;
+        }
+        
+        /* Media Upload */
+        .media-upload {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .media-upload:hover {
+            border-color: #0066cc;
+            background: #f7fafc;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #a0aec0;
+            margin-bottom: 16px;
+        }
+        
+        .upload-text {
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        
+        .upload-hint {
+            font-size: 12px;
+            color: #a0aec0;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        
+        /* Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .category-option {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        .category-option:hover {
+            border-color: #0066cc;
+            background: #f7fafc;
+        }
+        
+        .category-option.selected {
+            background: #0066cc;
+            color: white;
+            border-color: #0066cc;
+        }
+        
+        /* SEO Settings */
+        .seo-preview {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .seo-preview-title {
+            color: #1a0dab;
+            font-size: 18px;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        
+        .seo-preview-url {
+            color: #006621;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .seo-preview-description {
+            color: #545454;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .editor-main {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .editor-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .editor-actions {
+                justify-content: stretch;
+            }
+            
+            .btn-save-draft,
+            .btn-publish {
+                flex: 1;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin layout with sidebar and header -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <nav class="admin-sidebar" id="adminSidebar">
+            <!-- Sidebar content from admin-dashboard.html -->
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <!-- Header content from admin-dashboard.html -->
+            </header>
+
+            <!-- Blog Editor Content -->
+            <div class="dashboard-content">
+                <div class="editor-container">
+                    <div class="editor-header">
+                        <div>
+                            <h1>Create New Blog Post</h1>
+                            <p>Write and publish a new career article</p>
+                        </div>
+                        <div class="editor-actions">
+                            <button class="btn-save-draft" id="saveDraftBtn">
+                                <i class="fas fa-save"></i> Save Draft
+                            </button>
+                            <button class="btn-publish" id="publishBtn">
+                                <i class="fas fa-paper-plane"></i> Publish Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="editor-main">
+                        <!-- Main Editor -->
+                        <div class="editor-content">
+                            <input type="text" class="title-input" id="blogTitle" placeholder="Enter blog title...">
+                            
+                            <div class="quill-editor" id="editor">
+                                <!-- Quill editor will be initialized here -->
+                            </div>
+                            
+                            <div class="word-count">
+                                <span id="wordCount">0</span> words • <span id="readTime">0</span> min read
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="editor-sidebar">
+                            <!-- Featured Image -->
+                            <div class="sidebar-section">
+                                <h3><i class="fas fa-image"></i> Featured Image</h3>
+                                <div class="media-upload" id="imageUpload">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-text">Upload featured image</div>
+                                    <div class="upload-hint">Recommended: 1200x630px • Max 5MB</div>
+                                </div>
+                                <img id="imagePreview" class="preview-image" style="display: none;">
+                                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                            </div>
+
+                            <!-- Categories -->
+                            <div class="sidebar-section">
+                                <h3><i class="fas fa-folder"></i> Category</h3>
+                                <div class="categories-grid" id="categoriesGrid">
+                                    <div class="category-option" data-category="1">
+                                        Career Clarity
+                                    </div>
+                                    <div class="category-option" data-category="2">
+                                        Skill Development
+                                    </div>
+                                    <div class="category-option" data-category="3">
+                                        Job Search
+                                    </div>
+                                    <div class="category-option" data-category="4">
+                                        Opportunities
+                                    </div>
+                                    <div class="category-option" data-category="5">
+                                        Professionals
+                                    </div>
+                                    <div class="category-option" data-category="6">
+                                        Companies
+                                    </div>
+                                    <div class="category-option" data-category="7">
+                                        Stories
+                                    </div>
+                                </div>
+                                <input type="hidden" id="selectedCategory">
+                            </div>
+
+                            <!-- SEO Settings -->
+                            <div class="sidebar-section">
+                                <h3><i class="fas fa-search"></i> SEO Settings</h3>
+                                <div class="form-group">
+                                    <label for="seoTitle">SEO Title</label>
+                                    <input type="text" id="seoTitle" placeholder="Optimized title for search engines">
+                                </div>
+                                <div class="form-group">
+                                    <label for="seoDescription">Meta Description</label>
+                                    <textarea id="seoDescription" rows="3" placeholder="Brief description for search results"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="seoKeywords">Keywords</label>
+                                    <input type="text" id="seoKeywords" placeholder="comma, separated, keywords">
+                                </div>
+                                
+                                <div class="seo-preview">
+                                    <div class="seo-preview-title" id="seoPreviewTitle">SEO Title Preview</div>
+                                    <div class="seo-preview-url" id="seoPreviewUrl">https://zawadicareers.com/blog/sample-post</div>
+                                    <div class="seo-preview-description" id="seoPreviewDescription">Meta description preview will appear here...</div>
+                                </div>
+                            </div>
+
+                            <!-- Advanced Settings -->
+                            <div class="sidebar-section">
+                                <h3><i class="fas fa-cog"></i> Advanced</h3>
+                                <div class="form-group">
+                                    <label for="slug">URL Slug</label>
+                                    <input type="text" id="slug" placeholder="auto-generated-from-title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <input type="text" id="author" value="Admin" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="enableComments"> Enable Comments
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" id="featuredPost"> Feature this post
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include Quill Editor JS -->
+    <script src="https://cdn.quilljs.com/1.3.7/quill.js"></script>
+    <script src="js/supabase.js" type="module"></script>
+    <script src="js/admin.js" type="module"></script>
+    <script type="module">
+        import supabase from './js/supabase.js';
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            const { data } = await supabase.auth.getSession();
+            if (!data.session) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Initialize Quill Editor
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'direction': 'rtl' }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'font': [] }],
+                        [{ 'align': [] }],
+                        ['link', 'image', 'video', 'code-block'],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Write your blog post here...'
+            });
+            
+            // Setup event listeners
+            setupEventListeners(quill, data.session.user);
+        });
+        
+        function setupEventListeners(quill, user) {
+            // Category selection
+            const categoryOptions = document.querySelectorAll('.category-option');
+            categoryOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    categoryOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('selectedCategory').value = this.dataset.category;
+                });
+            });
+            
+            // Image upload
+            const imageUpload = document.getElementById('imageUpload');
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            imageUpload.addEventListener('click', () => imageInput.click());
+            
+            imageInput.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                        imageUpload.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    // Upload to Supabase Storage
+                    try {
+                        const fileExt = file.name.split('.').pop();
+                        const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+                        
+                        const { data, error } = await supabase.storage
+                            .from('blog-images')
+                            .upload(fileName, file);
+                        
+                        if (error) throw error;
+                        
+                        // Get public URL
+                        const { data: urlData } = supabase.storage
+                            .from('blog-images')
+                            .getPublicUrl(fileName);
+                        
+                        // Store image URL
+                        window.featuredImageUrl = urlData.publicUrl;
+                        
+                    } catch (error) {
+                        console.error('Error uploading image:', error);
+                        alert('Error uploading image. Please try again.');
+                    }
+                }
+            });
+            
+            // Save draft
+            document.getElementById('saveDraftBtn').addEventListener('click', async function() {
+                await saveBlogPost(quill, user, 'draft');
+            });
+            
+            // Publish
+            document.getElementById('publishBtn').addEventListener('click', async function() {
+                await saveBlogPost(quill, user, 'published');
+            });
+            
+            // Word count and read time
+            quill.on('text-change', function() {
+                const text = quill.getText();
+                const words = text.trim().split(/\s+/).length;
+                const readTime = Math.ceil(words / 200);
+                
+                document.getElementById('wordCount').textContent = words;
+                document.getElementById('readTime').textContent = readTime;
+            });
+            
+            // SEO preview updates
+            document.getElementById('blogTitle').addEventListener('input', function() {
+                document.getElementById('seoPreviewTitle').textContent = this.value || 'SEO Title Preview';
+            });
+            
+            document.getElementById('seoDescription').addEventListener('input', function() {
+                document.getElementById('seoPreviewDescription').textContent = this.value || 'Meta description preview will appear here...';
+            });
+        }
+        
+        async function saveBlogPost(quill, user, status) {
+            const title = document.getElementById('blogTitle').value.trim();
+            const categoryId = document.getElementById('selectedCategory').value;
+            const content = quill.root.innerHTML;
+            const textContent = quill.getText();
+            
+            if (!title) {
+                alert('Please enter a blog title');
+                return;
+            }
+            
+            if (!categoryId) {
+                alert('Please select a category');
+                return;
+            }
+            
+            if (textContent.trim().length < 100) {
+                alert('Blog content should be at least 100 words');
+                return;
+            }
+            
+            const blogData = {
+                title: title,
+                content: content,
+                excerpt: textContent.substring(0, 200) + '...',
+                category_id: parseInt(categoryId),
+                author: user.email,
+                status: status,
+                featured_image: window.featuredImageUrl || null,
+                read_time: Math.ceil(textContent.split(/\s+/).length / 200),
+                seo_title: document.getElementById('seoTitle').value || title,
+                seo_description: document.getElementById('seoDescription').value || textContent.substring(0, 160),
+                seo_keywords: document.getElementById('seoKeywords').value || '',
+                slug: document.getElementById('slug').value || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                enable_comments: document.getElementById('enableComments').checked,
+                is_featured: document.getElementById('featuredPost').checked,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            try {
+                const { data, error } = await supabase
+                    .from('blogs')
+                    .insert([blogData]);
+                
+                if (error) throw error;
+                
+                alert(`Blog ${status === 'published' ? 'published' : 'saved as draft'} successfully!`);
+                
+                if (status === 'published') {
+                    window.location.href = 'admin-dashboard.html';
+                }
+                
+            } catch (error) {
+                console.error('Error saving blog:', error);
+                alert('Error saving blog. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

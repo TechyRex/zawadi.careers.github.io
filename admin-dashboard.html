@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Zawadi Careers</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --secondary-blue: #00b3ff;
+            --dark-blue: #0a2540;
+            --light-blue: #e6f7ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-header img {
+            height: 32px;
+            width: auto;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .menu-section {
+            padding: 0 24px;
+            margin-bottom: 24px;
+        }
+
+        .menu-section h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            color: var(--gray-700);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: var(--gray-100);
+            color: var(--primary-blue);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            font-weight: 500;
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .profile-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .profile-info p {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Main Content */
+        .admin-main {
+            margin-left: 250px;
+            min-height: 100vh;
+            transition: margin-left 0.3s;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .header-left p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            padding: 10px 16px 10px 40px;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .notification-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 32px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-blue);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .stat-icon.posts { background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%); }
+        .stat-icon.views { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); }
+        .stat-icon.comments { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+        .stat-icon.subscribers { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .stat-change.negative {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .activity-item:hover {
+            background: var(--gray-50);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .activity-icon.post { background: var(--primary-blue); }
+        .activity-icon.comment { background: var(--success); }
+        .activity-icon.user { background: var(--warning); }
+        .activity-icon.system { background: var(--gray-500); }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: var(--gray-800);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-blue);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .action-desc {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar input {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-bar input {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                gap: 8px;
+            }
+
+            .search-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <img src="assets/images/zawadi-logo.png" alt="Zawadi">
+            <h2>Zawadi Admin</h2>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <h3>Main</h3>
+                <a href="admin-dashboard.html" class="menu-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-analytics.html" class="menu-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="admin-blog-editor.html" class="menu-item">
+                    <i class="fas fa-edit"></i>
+                    <span>Create Blog</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3>Content</h3>
+                <a href="#" class="menu-item" id="manageBlogs">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Manage Blogs</span>
+                    <span class="badge" id="blogCount">0</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Comments</span>
+                    <span class="badge" id="commentCount">0</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-folder"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-image"></i>
+                    <span>Media Library</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3>Users</h3>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>Subscribers</span>
+                    <span class="badge" id="subscriberCount">0</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admins</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h3>Settings</h3>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Site Settings</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Newsletter</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <div class="profile-avatar" id="adminAvatar">A</div>
+                <div class="profile-info">
+                    <h4 id="adminName">Admin User</h4>
+                    <p id="adminEmail">admin@zawadicareers.com</p>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn" style="margin-top: 16px; width: 100%; padding: 10px; background: var(--gray-100); border: none; border-radius: 8px; color: var(--danger); font-weight: 500; cursor: pointer;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1>Dashboard Overview</h1>
+                <p>Welcome back! Here's what's happening with your platform.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search blogs, users, analytics...">
+                </div>
+
+                <button class="notification-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="totalBlogs">0</div>
+                            <div class="stat-label">Total Blog Posts</div>
+                        </div>
+                        <div class="stat-icon posts">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                    </div>
+                    <span class="stat-change positive" id="blogChange">+12% this month</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="totalViews">0</div>
+                            <div class="stat-label">Total Views</div>
+                        </div>
+                        <div class="stat-icon views">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                    <span class="stat-change positive" id="viewChange">+24% this month</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="totalComments">0</div>
+                            <div class="stat-label">Comments</div>
+                        </div>
+                        <div class="stat-icon comments">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                    </div>
+                    <span class="stat-change positive" id="commentChange">+8% this month</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value" id="totalSubscribers">0</div>
+                            <div class="stat-label">Newsletter Subscribers</div>
+                        </div>
+                        <div class="stat-icon subscribers">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <span class="stat-change positive" id="subscriberChange">+15% this month</span>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Traffic Overview</h3>
+                        <select style="padding: 8px 12px; border: 1px solid var(--gray-300); border-radius: 6px;">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 90 days</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Top Categories</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3>Recent Activity</h3>
+                    <a href="#" style="color: var(--primary-blue); font-size: 14px;">View All</a>
+                </div>
+                <div class="activity-list" id="activityList">
+                    <!-- Activities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-card" onclick="window.location.href='admin-blog-editor.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="action-title">Create New Blog</div>
+                    <div class="action-desc">Write and publish a new article</div>
+                </div>
+
+                <div class="action-card" id="manageMediaBtn">
+                    <div class="action-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="action-title">Manage Media</div>
+                    <div class="action-desc">Upload and organize images</div>
+                </div>
+
+                <div class="action-card" id="viewAnalyticsBtn">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="action-title">View Analytics</div>
+                    <div class="action-desc">Detailed platform insights</div>
+                </div>
+
+                <div class="action-card" id="manageSubscribersBtn">
+                    <div class="action-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="action-title">Manage Subscribers</div>
+                    <div class="action-desc">View and export newsletter list</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <div class="panel-header">
+            <h3>Notifications</h3>
+            <button class="close-panel">&times;</button>
+        </div>
+        <div class="notifications-list">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+
+    <script src="js/supabase.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        import supabase from './js/supabase.js';
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            const session = await checkAuth();
+            if (!session) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // Load admin data
+            loadAdminData(session.user);
+            
+            // Load dashboard stats
+            await loadDashboardStats();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Initialize charts
+            initializeCharts();
+        });
+        
+        async function checkAuth() {
+            const { data } = await supabase.auth.getSession();
+            return data.session;
+        }
+        
+        function loadAdminData(user) {
+            document.getElementById('adminEmail').textContent = user.email;
+            document.getElementById('adminName').textContent = user.email.split('@')[0];
+            document.getElementById('adminAvatar').textContent = user.email[0].toUpperCase();
+        }
+        
+        async function loadDashboardStats() {
+            try {
+                // Get total blogs
+                const { count: blogCount } = await supabase
+                    .from('blogs')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalBlogs').textContent = blogCount || 0;
+                document.getElementById('blogCount').textContent = blogCount || 0;
+                
+                // Get total views (you need to create this column in your blogs table)
+                const { data: blogs } = await supabase
+                    .from('blogs')
+                    .select('views');
+                
+                const totalViews = blogs?.reduce((sum, blog) => sum + (blog.views || 0), 0) || 0;
+                document.getElementById('totalViews').textContent = totalViews.toLocaleString();
+                
+                // Get total comments
+                const { count: commentCount } = await supabase
+                    .from('comments')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalComments').textContent = commentCount || 0;
+                document.getElementById('commentCount').textContent = commentCount || 0;
+                
+                // Get total subscribers (you need to create a subscribers table)
+                const { count: subscriberCount } = await supabase
+                    .from('subscribers')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalSubscribers').textContent = subscriberCount || 0;
+                document.getElementById('subscriberCount').textContent = subscriberCount || 0;
+                
+                // Load recent activity
+                await loadRecentActivity();
+                
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+        
+        async function loadRecentActivity() {
+            const activityList = document.getElementById('activityList');
+            
+            // Get recent blogs
+            const { data: blogs } = await supabase
+                .from('blogs')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(5);
+            
+            // Get recent comments
+            const { data: comments } = await supabase
+                .from('comments')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(5);
+            
+            // Combine and sort activities
+            const activities = [];
+            
+            if (blogs) {
+                blogs.forEach(blog => {
+                    activities.push({
+                        type: 'post',
+                        title: `New blog published: "${blog.title}"`,
+                        time: new Date(blog.created_at).toLocaleDateString(),
+                        icon: 'fas fa-newspaper'
+                    });
+                });
+            }
+            
+            if (comments) {
+                comments.forEach(comment => {
+                    activities.push({
+                        type: 'comment',
+                        title: `New comment by ${comment.name}`,
+                        time: new Date(comment.created_at).toLocaleDateString(),
+                        icon: 'fas fa-comment'
+                    });
+                });
+            }
+            
+            // Sort by time (most recent first)
+            activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+            
+            // Display activities
+            activityList.innerHTML = activities.slice(0, 5).map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon ${activity.type}">
+                        <i class="${activity.icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function initializeCharts() {
+            // Traffic Chart
+            const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+            new Chart(trafficCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Visitors',
+                        data: [120, 190, 300, 500, 200, 300, 450],
+                        borderColor: '#0066cc',
+                        backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Career Clarity', 'Skill Dev', 'Job Search', 'Stories', 'Opportunities'],
+                    datasets: [{
+                        data: [25, 20, 18, 15, 22],
+                        backgroundColor: [
+                            '#0066cc',
+                            '#00b3ff',
+                            '#10b981',
+                            '#f59e0b',
+                            '#8b5cf6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function setupEventListeners() {
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('adminSidebar').classList.toggle('open');
+            });
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', async function() {
+                await supabase.auth.signOut();
+                localStorage.removeItem('adminSession');
+                window.location.href = 'admin-login.html';
+            });
+            
+            // Notifications panel
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationsPanel = document.getElementById('notificationsPanel');
+            
+            if (notificationBtn && notificationsPanel) {
+                notificationBtn.addEventListener('click', function() {
+                    notificationsPanel.style.display = 'block';
+                });
+                
+                notificationsPanel.querySelector('.close-panel').addEventListener('click', function() {
+                    notificationsPanel.style.display = 'none';
+                });
+            }
+            
+            // Quick action buttons
+            document.getElementById('manageMediaBtn')?.addEventListener('click', function() {
+                alert('Media management coming soon!');
+            });
+            
+            document.getElementById('viewAnalyticsBtn')?.addEventListener('click', function() {
+                window.location.href = 'admin-analytics.html';
+            });
+            
+            document.getElementById('manageSubscribersBtn')?.addEventListener('click', function() {
+                alert('Subscriber management coming soon!');
+            });
+        }
+    </script>
+</body>
+</html>
