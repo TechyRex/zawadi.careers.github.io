@@ -340,152 +340,220 @@
     </div>
 
     <script src="js/supabase.js" type="module"></script>
-    <script type="module">
-        import supabase from './js/supabase.js';
+<script type="module">
+    import supabase from './js/supabase.js';
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const loginBtn = document.getElementById('loginBtn');
+        const btnText = document.getElementById('btnText');
+        const loginSpinner = document.getElementById('loginSpinner');
+        const loginMessage = document.getElementById('loginMessage');
+        const togglePassword = document.getElementById('togglePassword');
         
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.getElementById('loginForm');
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const emailError = document.getElementById('emailError');
-            const passwordError = document.getElementById('passwordError');
-            const loginBtn = document.getElementById('loginBtn');
-            const btnText = document.getElementById('btnText');
-            const loginSpinner = document.getElementById('loginSpinner');
-            const loginMessage = document.getElementById('loginMessage');
-            const togglePassword = document.getElementById('togglePassword');
-            
-            // Check if user is already logged in
-            checkAuthStatus();
-            
-            // Toggle password visibility
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
-            });
-            
-            // Form validation
-            emailInput.addEventListener('input', function() {
-                if (this.value && this.value.includes('@')) {
-                    this.classList.remove('error');
-                    emailError.classList.remove('show');
-                }
-            });
-            
-            passwordInput.addEventListener('input', function() {
-                if (this.value.length >= 8) {
-                    this.classList.remove('error');
-                    passwordError.classList.remove('show');
-                }
-            });
-            
-            // Form submission
-            loginForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Validate inputs
-                let isValid = true;
-                
-                if (!emailInput.value || !emailInput.value.includes('@')) {
-                    emailInput.classList.add('error');
-                    emailError.classList.add('show');
-                    isValid = false;
-                }
-                
-                if (!passwordInput.value || passwordInput.value.length < 8) {
-                    passwordInput.classList.add('error');
-                    passwordError.classList.add('show');
-                    isValid = false;
-                }
-                
-                if (!isValid) return;
-                
-                // Show loading state
-                btnText.textContent = 'Signing in...';
-                loginSpinner.style.display = 'block';
-                loginBtn.disabled = true;
-                
-                try {
-                    // Sign in with Supabase
-                    const { data, error } = await supabase.auth.signInWithPassword({
-                        email: emailInput.value,
-                        password: passwordInput.value
-                    });
-                    
-                    if (error) throw error;
-                    
-                    // Check if user has admin role (you'll need to set this up in Supabase)
-                    const { data: userData, error: userError } = await supabase
-                        .from('profiles')
-                        .select('role')
-                        .eq('id', data.user.id)
-                        .single();
-                    
-                    if (userError) throw userError;
-                    
-                    // For now, allow any authenticated user (you should implement proper role checking)
-                    if (data.user) {
-                        // Store session
-                        localStorage.setItem('adminSession', JSON.stringify({
-                            userId: data.user.id,
-                            email: data.user.email,
-                            loggedInAt: new Date().toISOString()
-                        }));
-                        
-                        // Remember me
-                        if (document.getElementById('rememberMe').checked) {
-                            localStorage.setItem('rememberEmail', emailInput.value);
-                        }
-                        
-                        // Show success message
-                        showMessage('success', 'Login successful! Redirecting to dashboard...');
-                        
-                        // Redirect to dashboard
-                        setTimeout(() => {
-                            window.location.href = 'admin-dashboard.html';
-                        }, 1500);
-                    } else {
-                        throw new Error('Unauthorized access');
-                    }
-                    
-                } catch (error) {
-                    console.error('Login error:', error);
-                    showMessage('error', error.message || 'Invalid credentials. Please try again.');
-                    
-                    // Reset button state
-                    btnText.textContent = 'Sign In';
-                    loginSpinner.style.display = 'none';
-                    loginBtn.disabled = false;
-                }
-            });
-            
-            function showMessage(type, text) {
-                loginMessage.textContent = text;
-                loginMessage.className = `login-message ${type}`;
-                loginMessage.style.display = 'flex';
-                
-                // Auto hide after 5 seconds
-                setTimeout(() => {
-                    loginMessage.style.display = 'none';
-                }, 5000);
-            }
-            
-            async function checkAuthStatus() {
-                const { data } = await supabase.auth.getSession();
-                if (data.session) {
-                    // User is already logged in, redirect to dashboard
-                    window.location.href = 'admin-dashboard.html';
-                }
-                
-                // Load remembered email
-                const rememberedEmail = localStorage.getItem('rememberEmail');
-                if (rememberedEmail) {
-                    emailInput.value = rememberedEmail;
-                    document.getElementById('rememberMe').checked = true;
-                }
+        // Check if user is already logged in
+        checkAuthStatus();
+        
+        // Toggle password visibility
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+        });
+        
+        // Form validation
+        emailInput.addEventListener('input', function() {
+            if (this.value && this.value.includes('@')) {
+                this.classList.remove('error');
+                emailError.classList.remove('show');
             }
         });
-    </script>
+        
+        passwordInput.addEventListener('input', function() {
+            if (this.value.length >= 8) {
+                this.classList.remove('error');
+                passwordError.classList.remove('show');
+            }
+        });
+        
+        // Form submission - UPDATED CODE
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (!emailInput.value || !emailInput.value.includes('@')) {
+                emailInput.classList.add('error');
+                emailError.classList.add('show');
+                isValid = false;
+            }
+            
+            if (!passwordInput.value || passwordInput.value.length < 8) {
+                passwordInput.classList.add('error');
+                passwordError.classList.add('show');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Show loading state
+            btnText.textContent = 'Signing in...';
+            loginSpinner.style.display = 'block';
+            loginBtn.disabled = true;
+            
+            try {
+                // 1. Sign in with Supabase
+                const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+                    email: emailInput.value,
+                    password: passwordInput.value
+                });
+                
+                if (authError) {
+                    // Handle auth errors
+                    if (authError.message.includes('Invalid login credentials')) {
+                        throw new Error('Invalid email or password. Please try again.');
+                    } else if (authError.message.includes('Email not confirmed')) {
+                        throw new Error('Please verify your email address before logging in.');
+                    } else {
+                        throw authError;
+                    }
+                }
+                
+                // 2. Check user profile WITHOUT using .single()
+                let userRole = 'pending';
+                let hasProfile = false;
+                
+                try {
+                    // Use .limit(1) instead of .single()
+                    const { data: profiles, error: profileError } = await supabase
+                        .from('admin_profiles')
+                        .select('role')
+                        .eq('id', authData.user.id)
+                        .limit(1);  // Changed from .single() to .limit(1)
+                    
+                    if (profileError) {
+                        console.warn('Profile check warning:', profileError);
+                    } else if (profiles && profiles.length > 0) {
+                        hasProfile = true;
+                        userRole = profiles[0].role;  // Get first item from array
+                        
+                        // Check if user is approved
+                        if (userRole !== 'admin' && userRole !== 'super_admin') {
+                            // Sign them out if not approved
+                            await supabase.auth.signOut();
+                            throw new Error('Your account is pending approval. Please contact administrator.');
+                        }
+                    } else {
+                        // Profile doesn't exist, try to create one
+                        await createAdminProfile(authData.user);
+                    }
+                } catch (profileErr) {
+                    console.warn('Profile handling error:', profileErr.message);
+                    // Continue anyway - authentication succeeded
+                }
+                
+                // 3. Store session
+                localStorage.setItem('adminSession', JSON.stringify({
+                    userId: authData.user.id,
+                    email: authData.user.email,
+                    role: userRole,
+                    loggedInAt: new Date().toISOString()
+                }));
+                
+                // 4. Remember me
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('rememberEmail', emailInput.value);
+                } else {
+                    localStorage.removeItem('rememberEmail');
+                }
+                
+                // 5. Show success message
+                showMessage('success', 'Login successful! Redirecting to dashboard...');
+                
+                // 6. Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                // Better error messages
+                let errorMsg = error.message;
+                
+                if (error.message.includes('Invalid email or password')) {
+                    errorMsg = 'Invalid email or password. Please try again.';
+                } else if (error.message.includes('pending approval')) {
+                    errorMsg = error.message;
+                } else if (error.message.includes('Rate limit exceeded')) {
+                    errorMsg = 'Too many login attempts. Please try again later.';
+                }
+                
+                showMessage('error', errorMsg);
+                
+                // Reset button state
+                btnText.textContent = 'Sign In';
+                loginSpinner.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+        
+        // Helper function to create admin profile
+        async function createAdminProfile(user) {
+            try {
+                const { error } = await supabase
+                    .from('admin_profiles')
+                    .insert([
+                        {
+                            id: user.id,
+                            email: user.email,
+                            first_name: user.user_metadata?.first_name || 'Admin',
+                            last_name: user.user_metadata?.last_name || 'User',
+                            role: 'pending',
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (error) {
+                    console.warn('Could not create admin profile:', error);
+                    // Don't throw - this is not critical for login
+                }
+            } catch (err) {
+                console.warn('Profile creation failed:', err);
+            }
+        }
+        
+        function showMessage(type, text) {
+            loginMessage.textContent = text;
+            loginMessage.className = `login-message ${type}`;
+            loginMessage.style.display = 'flex';
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                loginMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        async function checkAuthStatus() {
+            const { data } = await supabase.auth.getSession();
+            if (data.session) {
+                // User is already logged in, redirect to dashboard
+                window.location.href = 'admin-dashboard.html';
+            }
+            
+            // Load remembered email
+            const rememberedEmail = localStorage.getItem('rememberEmail');
+            if (rememberedEmail) {
+                emailInput.value = rememberedEmail;
+                document.getElementById('rememberMe').checked = true;
+            }
+        }
+    });
+</script>
 </body>
 </html>
