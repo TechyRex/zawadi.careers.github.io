@@ -207,19 +207,24 @@
     <script src="js/main.js" type="module"></script>
     <script src="js/blog.js" type="module"></script>
     <script type="module">
-        // Get blog ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const blogId = urlParams.get('id');
-        
-        if (blogId) {
-            // Load blog content
-            import('./js/blog.js').then(module => {
-                module.loadBlogDetail(blogId);
-            });
-        } else {
+    // Get blog ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const blogId = urlParams.get('id');
+    
+    if (blogId) {
+        // Import and initialize blog detail
+        import('./js/blog.js').then(module => {
+            // Call the loadBlogDetail function directly
+            module.loadBlogDetail(blogId);
+        }).catch(error => {
+            console.error('Error loading blog module:', error);
             document.getElementById('errorState').style.display = 'flex';
             document.getElementById('loadingState').style.display = 'none';
-        }
-    </script>
+        });
+    } else {
+        document.getElementById('errorState').style.display = 'flex';
+        document.getElementById('loadingState').style.display = 'none';
+    }
+</script>
 </body>
 </html>
