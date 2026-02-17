@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
     <style>
+        /* Your existing styles remain the same */
         * {
             box-sizing: border-box;
         }
@@ -117,7 +118,7 @@
         
         .stat-item {
             text-align: center;
-            min-width: 0; /* Prevents flex items from overflowing */
+            min-width: 0;
         }
         
         .stat-number {
@@ -356,6 +357,226 @@
             gap: 5px;
         }
         
+        /* Search Modal Styles */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        
+        .search-modal.active {
+            display: block;
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 80px auto 20px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .search-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #0a2540 0%, #1a365d 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .search-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .close-search {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        
+        .close-search:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .search-input-wrapper {
+            padding: 20px;
+            background: #f7fafc;
+        }
+        
+        .search-input-group {
+            display: flex;
+            gap: 10px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input-group:focus-within {
+            border-color: #0066cc;
+        }
+        
+        .search-input-group input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .search-input-group button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+        
+        .search-input-group button:hover {
+            background: #0052a3;
+        }
+        
+        .search-filters {
+            padding: 15px 20px;
+            background: #f7fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .search-filter-btn.active {
+            background: #0066cc;
+            color: white;
+            border-color: #0066cc;
+        }
+        
+        .search-results {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .search-result-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.3s;
+        }
+        
+        .search-result-item:hover {
+            background: #f7fafc;
+        }
+        
+        .result-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0066cc 0%, #00b3ff 100%);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .result-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+        
+        .result-category {
+            font-size: 12px;
+            color: #0066cc;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .result-excerpt {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.4;
+            word-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .no-search-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #718096;
+        }
+        
+        .no-search-results i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #cbd5e0;
+        }
+        
+        .search-loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+        
+        .search-loading i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #0066cc;
+        }
+        
         /* Category-specific colors */
         .category-1 .category-icon-large {
             background: linear-gradient(135deg, #0066cc 0%, #00b3ff 100%);
@@ -436,6 +657,7 @@
             padding: 4px 0;
             flex: 1;
             max-width: 70px;
+            cursor: pointer;
         }
         
         .nav-icon i {
@@ -453,7 +675,7 @@
         
         /* Footer */
         .footer {
-            margin-bottom: 70px; /* Space for mobile nav */
+            margin-bottom: 70px;
         }
         
         /* Tablet and up */
@@ -493,6 +715,10 @@
             .footer {
                 margin-bottom: 0;
             }
+            
+            .search-container {
+                margin: 100px auto 30px;
+            }
         }
         
         /* Desktop */
@@ -525,6 +751,19 @@
                 width: 60px;
                 height: 60px;
                 font-size: 24px;
+            }
+            
+            .search-input-group {
+                flex-direction: column;
+            }
+            
+            .search-input-group button {
+                padding: 12px;
+            }
+            
+            .result-image {
+                width: 60px;
+                height: 60px;
             }
         }
     </style>
@@ -565,6 +804,41 @@
         </div>
     </section>
 
+    <!-- Search Modal -->
+    <div id="searchModal" class="search-modal">
+        <div class="search-container">
+            <div class="search-header">
+                <h2><i class="fas fa-search"></i> Search Articles & Blogs</h2>
+                <button class="close-search" onclick="closeSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-input-wrapper">
+                <div class="search-input-group">
+                    <input type="text" id="searchInput" placeholder="Search for articles, topics, or keywords..." autocomplete="off">
+                    <button onclick="performSearch()">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </button>
+                </div>
+            </div>
+            <div class="search-filters">
+                <div class="filter-tabs">
+                    <button class="search-filter-btn active" onclick="filterSearch('all')">All</button>
+                    <button class="search-filter-btn" onclick="filterSearch('articles')">Articles</button>
+                    <button class="search-filter-btn" onclick="filterSearch('blogs')">Blogs</button>
+                </div>
+            </div>
+            <div class="search-results" id="searchResults">
+                <!-- Search results will be displayed here -->
+                <div class="search-loading" style="display: none;" id="searchLoading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Searching...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Mobile Bottom Navigation -->
     <div class="mobile-bottom-nav">
         <a href="index.html" class="nav-icon">
@@ -583,11 +857,14 @@
             <i class="fas fa-bookmark"></i>
             <span>Saved</span>
         </a>
-        <a href="#" class="nav-icon">
+        <a href="#" class="nav-icon" onclick="openSearch(); return false;">
             <i class="fas fa-search"></i>
             <span>Search</span>
         </a>
     </div>
+
+    <!-- Desktop Search Button (if needed) -->
+    <button onclick="openSearch()" class="desktop-search-btn" style="display: none;">Search</button>
 
     <!-- Footer (Same as index.html) -->
     <footer class="footer">
@@ -703,6 +980,13 @@
             // Load category articles
             await loadCategoryArticles(category.id);
         }
+
+        // Add search input event listener for real-time search (optional)
+        document.getElementById('searchInput')?.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
     });
     
     function loadCategoryDetails(category) {
@@ -768,7 +1052,6 @@
             if (articles && articles.length > 0) {
                 container.innerHTML = articles.map(article => {
                     // Get the image URL - adjust this based on your database field name
-                    // Common field names: 'image_url', 'thumbnail', 'featured_image', etc.
                     const imageUrl = article.image_url || article.thumbnail || article.featured_image || null;
                     
                     // Generate a consistent color based on category ID for fallback
@@ -863,6 +1146,425 @@
         // Load all articles for the category
         window.location.href = `blog.html?category=${Object.keys(categories).find(key => categories[key].id === categoryId)}`;
     };
+    </script>
+
+    <!-- Search Functionality Script -->
+    <!-- Search Functionality Script - Updated to work with Supabase -->
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+// Initialize Supabase client with your credentials
+// IMPORTANT: Replace these with your actual Supabase URL and anon key
+const supabaseUrl = 'https://xtubniixvmwluwybbpos.supabase.co'; // Get this from your Supabase project settings
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0dWJuaWl4dm13bHV3eWJicG9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1ODc4MDUsImV4cCI6MjA4NjE2MzgwNX0.P278_vaPqKyPcjlaFVqmFHJC6OcqZU30gk2b5SyCOI4'; // Get this from your Supabase project settings
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Global variables
+let currentFilter = 'all';
+let allArticles = [];
+let searchTimeout;
+let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+
+// Category mapping for display
+const categoryMap = {
+    1: 'Career Clarity',
+    2: 'Skill Development',
+    3: 'Job Search',
+    4: 'Opportunities',
+    5: 'Professionals',
+    6: 'Companies',
+    7: 'Stories'
+};
+
+// Open search modal
+window.openSearch = function() {
+    const modal = document.getElementById('searchModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Clear previous results and input
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').innerHTML = '';
+    document.getElementById('suggestionsContainer').classList.remove('active');
+    
+    // Focus on input
+    setTimeout(() => {
+        document.getElementById('searchInput').focus();
+    }, 100);
+    
+    // Load recent articles
+    loadRecentArticles();
+    displayRecentSearches();
+};
+
+// Close search modal
+window.closeSearch = function() {
+    const modal = document.getElementById('searchModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').innerHTML = '';
+    document.getElementById('suggestionsContainer').classList.remove('active');
+};
+
+// Display recent searches
+function displayRecentSearches() {
+    const recentContainer = document.getElementById('recentSearches');
+    if (recentSearches.length > 0) {
+        recentContainer.innerHTML = `
+            <span><i class="fas fa-history"></i> Recent:</span>
+            ${recentSearches.map(term => `
+                <span class="recent-search-tag" onclick="useRecentSearch('${term.replace(/'/g, "\\'")}')">
+                    ${term}
+                </span>
+            `).join('')}
+        `;
+    } else {
+        recentContainer.innerHTML = '';
+    }
+}
+
+// Use recent search term
+window.useRecentSearch = function(term) {
+    document.getElementById('searchInput').value = term;
+    performSearch();
+};
+
+// Add to recent searches
+function addToRecentSearches(term) {
+    if (!term || term.trim() === '') return;
+    
+    // Remove if already exists (case insensitive)
+    recentSearches = recentSearches.filter(t => t.toLowerCase() !== term.toLowerCase());
+    
+    // Add to beginning
+    recentSearches.unshift(term);
+    
+    // Keep only last 5 searches
+    if (recentSearches.length > 5) {
+        recentSearches.pop();
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+    
+    // Update display
+    displayRecentSearches();
+}
+
+// Load recent articles
+async function loadRecentArticles() {
+    try {
+        const searchResults = document.getElementById('searchResults');
+        searchResults.innerHTML = `
+            <div class="search-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading recent articles...</p>
+            </div>
+        `;
+
+        const { data: articles, error } = await supabase
+            .from('blogs')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(10);
+
+        if (error) throw error;
+
+        allArticles = articles || [];
+        
+        if (articles && articles.length > 0) {
+            displaySearchResults(articles);
+        } else {
+            searchResults.innerHTML = `
+                <div class="no-search-results">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>No articles yet</h3>
+                    <p>Check back soon for new content!</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error loading recent articles:', error);
+        document.getElementById('searchResults').innerHTML = `
+            <div class="no-search-results">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Error loading articles</h3>
+                <p>Please check your Supabase connection and try again.</p>
+                <p style="font-size: 12px; color: #e53e3e;">${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// Get suggestions as user types
+async function getSuggestions(searchTerm) {
+    if (!searchTerm || searchTerm.length < 2) {
+        document.getElementById('suggestionsContainer').classList.remove('active');
+        return;
+    }
+
+    try {
+        const { data: suggestions, error } = await supabase
+            .from('blogs')
+            .select('id, title, category_id, excerpt')
+            .or(`title.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%`)
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+        if (error) throw error;
+
+        const suggestionsContainer = document.getElementById('suggestionsContainer');
+        
+        if (suggestions && suggestions.length > 0) {
+            suggestionsContainer.innerHTML = suggestions.map(suggestion => {
+                const categoryName = categoryMap[suggestion.category_id] || 'General';
+                // Highlight the matching text
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                const highlightedTitle = suggestion.title.replace(regex, '<span class="suggestion-highlight">$1</span>');
+                
+                return `
+                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.id}')">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="suggestion-content">
+                            <div class="suggestion-title">${highlightedTitle}</div>
+                            <div class="suggestion-subtitle">
+                                <span class="suggestion-category">${categoryName}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            suggestionsContainer.classList.add('active');
+        } else {
+            suggestionsContainer.innerHTML = `
+                <div class="suggestion-item" style="justify-content: center; color: #718096;">
+                    <i class="fas fa-search"></i>
+                    <span>No suggestions found for "${searchTerm}"</span>
+                </div>
+            `;
+            suggestionsContainer.classList.add('active');
+        }
+    } catch (error) {
+        console.error('Error getting suggestions:', error);
+        document.getElementById('suggestionsContainer').innerHTML = `
+            <div class="suggestion-item" style="justify-content: center; color: #e53e3e;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Error loading suggestions</span>
+            </div>
+        `;
+        document.getElementById('suggestionsContainer').classList.add('active');
+    }
+}
+
+// Select suggestion
+window.selectSuggestion = function(articleId) {
+    window.location.href = `blog-detail.html?id=${articleId}`;
+    closeSearch();
+};
+
+// Perform search
+window.performSearch = async function() {
+    const searchTerm = document.getElementById('searchInput').value.trim();
+    
+    // Hide suggestions
+    document.getElementById('suggestionsContainer').classList.remove('active');
+    
+    // Add to recent searches
+    if (searchTerm) {
+        addToRecentSearches(searchTerm);
+    }
+    
+    if (!searchTerm) {
+        loadRecentArticles();
+        return;
+    }
+
+    const searchResults = document.getElementById('searchResults');
+    
+    // Show loading state
+    searchResults.innerHTML = `
+        <div class="search-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Searching for "${searchTerm}"...</p>
+        </div>
+    `;
+
+    try {
+        // Search in multiple fields
+        const { data: articles, error } = await supabase
+            .from('blogs')
+            .select('*')
+            .or(`title.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        allArticles = articles || [];
+        
+        if (articles && articles.length > 0) {
+            displaySearchResults(articles);
+        } else {
+            searchResults.innerHTML = `
+                <div class="no-search-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No articles found for "${searchTerm}"</h3>
+                    <p>Try searching with different keywords</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error searching articles:', error);
+        searchResults.innerHTML = `
+            <div class="no-search-results">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Error performing search</h3>
+                <p>Please check your Supabase connection and try again.</p>
+                <p style="font-size: 12px; color: #e53e3e;">${error.message}</p>
+            </div>
+        `;
+    }
+};
+
+// Filter search results
+window.filterSearch = function(filter, event) {
+    currentFilter = filter;
+    
+    // Update active filter button
+    document.querySelectorAll('.search-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    displaySearchResults(allArticles);
+};
+
+// Display search results
+function displaySearchResults(articles) {
+    const searchResults = document.getElementById('searchResults');
+    
+    if (!articles || articles.length === 0) {
+        searchResults.innerHTML = `
+            <div class="no-search-results">
+                <i class="fas fa-search"></i>
+                <h3>No articles found</h3>
+                <p>Try searching with different keywords</p>
+            </div>
+        `;
+        return;
+    }
+
+    let filteredArticles = articles;
+    
+    // Apply filter if not 'all'
+    if (currentFilter !== 'all') {
+        filteredArticles = articles.filter(article => article.type === currentFilter);
+    }
+
+    if (filteredArticles.length === 0) {
+        searchResults.innerHTML = `
+            <div class="no-search-results">
+                <i class="fas fa-filter"></i>
+                <h3>No ${currentFilter} found</h3>
+                <p>Try a different filter or search term</p>
+            </div>
+        `;
+        return;
+    }
+
+    const categoryColors = {
+        1: 'linear-gradient(135deg, #0066cc 0%, #00b3ff 100%)',
+        2: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+        3: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
+        4: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
+        5: 'linear-gradient(135deg, #ef4444 0%, #f87171 100%)',
+        6: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)',
+        7: 'linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%)'
+    };
+
+    searchResults.innerHTML = filteredArticles.map(article => {
+        const categoryName = categoryMap[article.category_id] || 'General';
+        const fallbackGradient = categoryColors[article.category_id] || 'linear-gradient(135deg, #0066cc 0%, #00b3ff 100%)';
+        const imageUrl = article.image_url || article.thumbnail || article.featured_image || null;
+        const titleFirstLetter = article.title ? article.title.charAt(0).toUpperCase() : 'A';
+
+        return `
+            <a href="blog-detail.html?id=${article.id}" class="search-result-item" onclick="closeSearch()">
+                <div class="result-image" style="background: ${imageUrl ? `url('${imageUrl}')` : fallbackGradient}; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+                    ${!imageUrl ? `<span style="color: white; font-weight: bold; font-size: 24px;">${titleFirstLetter}</span>` : ''}
+                </div>
+                <div class="result-content">
+                    <div class="result-title">${article.title}</div>
+                    <div class="result-category">${categoryName}</div>
+                    <div class="result-excerpt">${article.excerpt || (article.content ? article.content.substring(0, 120) + '...' : 'No description available')}</div>
+                    <div style="font-size: 11px; color: #a0aec0; margin-top: 5px;">
+                        <i class="far fa-clock"></i> ${article.read_time || '5'} min read
+                    </div>
+                </div>
+            </a>
+        `;
+    }).join('');
+}
+
+// Set up input event listener for suggestions
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const searchTerm = e.target.value.trim();
+            
+            if (searchTerm.length >= 2) {
+                searchTimeout = setTimeout(() => {
+                    getSuggestions(searchTerm);
+                }, 300); // Debounce for 300ms
+            } else {
+                document.getElementById('suggestionsContainer').classList.remove('active');
+            }
+        });
+
+        // Handle keyboard navigation in suggestions
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const firstSuggestion = document.querySelector('.suggestion-item');
+                if (firstSuggestion) {
+                    firstSuggestion.focus();
+                }
+            }
+        });
+    }
+});
+
+// Close modal when clicking outside
+document.getElementById('searchModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeSearch();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeSearch();
+    }
+});
+
+// Click outside suggestions to close
+document.addEventListener('click', function(e) {
+    const suggestions = document.getElementById('suggestionsContainer');
+    const searchInput = document.getElementById('searchInput');
+    
+    if (suggestions && !suggestions.contains(e.target) && e.target !== searchInput) {
+        suggestions.classList.remove('active');
+    }
+});
+
+// Make functions available globally
+window.getCategoryName = function(categoryId) {
+    return categoryMap[categoryId] || 'General';
+};
 </script>
 </body>
 </html>

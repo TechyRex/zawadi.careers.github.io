@@ -7,6 +7,330 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+    <style>
+    /* Featured Blogs Section */
+    .featured-blogs {
+        padding: 2rem 1rem;
+        background: var(--gray-50);
+        width: 100%;
+    }
+
+    .section-header {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 2rem;
+        padding: 0 1rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
+        color: var(--dark-blue);
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+        color: var(--gray-600);
+    }
+
+    .blogs-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    /* Featured Blog Main */
+    .featured-blog-main {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--gray-200);
+        width: 100%;
+    }
+
+    .featured-blog-image {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    }
+
+    .featured-blog-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .featured-blog-category {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: white;
+        color: var(--primary-blue);
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        z-index: 2;
+    }
+
+    .featured-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--warning);
+        color: white;
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        z-index: 2;
+    }
+
+    .featured-blog-content {
+        padding: 1.5rem;
+    }
+
+    .featured-blog-meta {
+        display: flex;
+        gap: 1rem;
+        color: var(--gray-500);
+        font-size: 0.8rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .featured-blog-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .featured-blog-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--dark-blue);
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .featured-blog-excerpt {
+        color: var(--gray-600);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    /* Featured Blog Footer - Updated to match image */
+/* Featured Blog Footer - Updated */
+/* Featured Blog Footer - Updated to match image */
+.featured-blog-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+    width: 100%;
+}
+
+.featured-blog-email {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    font-weight: 400;
+    line-height: 1;
+}
+
+.featured-read-btn {
+    color: var(--primary-blue);
+    font-weight: 400;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.featured-read-btn i {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+}
+
+.featured-read-btn:hover i {
+    transform: translateX(3px);
+}
+    /* Blogs Grid */
+    .blogs-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .blog-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--gray-200);
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        width: 100%;
+    }
+
+    .blog-card-content {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blog-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        color: var(--gray-500);
+        font-size: 0.8rem;
+    }
+
+    .blog-card-category {
+        color: var(--primary-blue);
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .blog-card-stats {
+        display: flex;
+        gap: 0.5rem;
+        color: var(--gray-500);
+        font-size: 0.8rem;
+    }
+
+    .blog-card-stats span {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+    }
+
+    .blog-card-meta {
+        display: flex;
+        gap: 0.75rem;
+        color: var(--gray-500);
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-card-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+    }
+
+    .blog-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark-blue);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .blog-card-excerpt {
+        color: var(--gray-600);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-card-website {
+        color: var(--primary-blue);
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+        word-break: break-all;
+    }
+
+    .blog-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--gray-200);
+    width: 100%;
+}
+
+.blog-card-author {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    font-weight: 400;
+}
+
+.blog-card-read {
+    color: var(--primary-blue);
+    font-weight: 400;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+}
+
+.blog-card-read i {
+    font-size: 0.7rem;
+}
+
+
+    /* Desktop layout */
+    @media (min-width: 1024px) {
+        .blogs-container {
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .featured-blog-main {
+            position: sticky;
+            top: 100px;
+        }
+
+        .featured-blog-image {
+            height: 220px;
+        }
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+        .featured-blog-main,
+        .blog-card {
+            background: var(--gray-800);
+            border-color: var(--gray-700);
+        }
+
+        .featured-blog-title,
+        .blog-card-title {
+            color: white;
+        }
+
+        .featured-blog-excerpt,
+        .blog-card-excerpt {
+            color: var(--gray-300);
+        }
+
+        .author-name,
+        .blog-card-author {
+            color: var(--gray-300);
+        }
+    }
+</style>
 </head>
 <body>
     <!-- Newsletter Popup -->
@@ -366,5 +690,138 @@
     <script src="js/supabase.js" type="module"></script>
     <script src="js/main.js" type="module"></script>
     <script src="js/blog.js" type="module"></script>
+    <script type="module">
+    import supabase from './js/supabase.js';
+    import { getCategoryName } from './js/main.js';
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadRecentBlogs();
+    });
+
+    async function loadRecentBlogs() {
+        try {
+            const { data: blogs, error } = await supabase
+                .from('blogs')
+                .select('*')
+                .eq('status', 'published')
+                .order('created_at', { ascending: false })
+                .limit(2);
+
+            if (error) throw error;
+            
+            if (!blogs || blogs.length === 0) return;
+
+            // Display featured blog (most recent)
+            if (blogs.length >= 1) {
+                displayFeaturedBlog(blogs[0]);
+            }
+            
+            // Display second blog in grid
+            if (blogs.length === 2) {
+                displayBlogGrid([blogs[1]]);
+            }
+
+        } catch (error) {
+            console.error('Error loading blogs:', error);
+        }
+    }
+
+    function displayFeaturedBlog(blog) {
+        const imageUrl = blog.image_url || blog.featured_image || blog.thumbnail;
+        const formattedDate = new Date(blog.created_at).toLocaleDateString('en-US', {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        const excerpt = blog.excerpt || (blog.content ? blog.content.replace(/<[^>]*>/g, '').substring(0, 120) + '...' : '');
+        const categoryName = getCategoryName(blog.category_id);
+        const authorName = blog.author || 'Zawadi Careers';
+
+        document.querySelector('.featured-blog-main').innerHTML = `
+            <a href="blog-detail.html?id=${blog.id}" style="text-decoration: none; color: inherit; display: block;">
+                <div class="featured-blog-image">
+                    ${imageUrl ? 
+                        `<img src="${imageUrl}" alt="${blog.title}">` : 
+                        `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;font-size:2rem;">${categoryName[0]}</div>`
+                    }
+                    <span class="featured-blog-category">${categoryName}</span>
+                    <span class="featured-badge">
+                        <i class="fas fa-star"></i> Latest
+                    </span>
+                </div>
+                <div class="featured-blog-content">
+                    <div class="featured-blog-meta">
+                        <span><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                        <span><i class="far fa-clock"></i> ${blog.read_time || '3'} min read</span>
+                    </div>
+                    <h2 class="featured-blog-title">${blog.title}</h2>
+                    <p class="featured-blog-excerpt">${excerpt}</p>
+                    <div class="featured-blog-footer">
+                        <span class="featured-blog-email">${authorName}</span>
+                        <span class="featured-read-btn">
+                            Read More <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        `;
+    }
+
+    function displayBlogGrid(blogs) {
+        const blogsGrid = document.getElementById('blogsGrid');
+        
+        blogsGrid.innerHTML = blogs.map(blog => {
+            const formattedDate = new Date(blog.created_at).toLocaleDateString('en-US', {
+                month: 'numeric',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            const excerpt1 = blog.excerpt || (blog.content ? blog.content.replace(/<[^>]*>/g, '').substring(0, 80) + '...' : '');
+            const excerpt2 = blog.excerpt || (blog.content ? blog.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : '');
+            const categoryName = getCategoryName(blog.category_id);
+            const authorName = blog.author || 'Zawadi Careers';
+            const website = blog.website || 'www.zawadicareers.com';
+
+            return `
+                <a href="blog-detail.html?id=${blog.id}" class="blog-card">
+                    <div class="blog-card-content">
+                        <div class="blog-card-header">
+                            <span class="blog-card-category">${categoryName}</span>
+                            <div class="blog-card-stats">
+                                <span>2</span>
+                                <span>Zawadi Careers</span>
+                            </div>
+                        </div>
+                        
+                        <div class="blog-card-meta">
+                            <span><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                            <span><i class="far fa-clock"></i> ${blog.read_time || '3'} min read</span>
+                        </div>
+                        
+                        <h3 class="blog-card-title">${blog.title}</h3>
+                        
+                        <p class="blog-card-excerpt">${excerpt1}</p>
+                        
+                        <div class="blog-card-website">
+                            ${website}
+                        </div>
+                        
+                        <p class="blog-card-excerpt">${excerpt2}</p>
+                        
+                        <div class="featured-blog-footer">
+                            <span class="featured-blog-email">
+                                ${authorName}
+                            </span>
+                            <span class="featured-read-btn">
+                                Read More <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
+
+                    </div>
+                </a>
+            `;
+        }).join('');
+    }
+</script>
 </body>
 </html>

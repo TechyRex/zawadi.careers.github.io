@@ -1,9 +1,19 @@
 import supabase, { getBlogs, getBlogById, addBlogView, getComments, addComment, toggleLike, getLikesCount } from './supabase.js';
 import { getCategoryName } from './main.js';
 
+// Add search state variables at the top
+let currentSearchTerm = '';
+let currentSortOption = 'newest';
+let currentCategory = 'all';
+let currentPage = 1;
+let totalBlogs = 0;
+
 // Blog page functionality
 if (document.querySelector('.blog-posts')) {
     loadBlogPosts();
+    
+    // Setup search listeners
+    setupSearchListeners();
 }
 
 // Blog detail functionality
@@ -15,15 +25,99 @@ if (document.querySelector('.blog-detail-container')) {
     }
 }
 
+// Add this new function for search listeners
+function setupSearchListeners() {
+    const searchInput = document.getElementById('blogSearch');
+    const searchButton = document.querySelector('.search-btn');
+    const sortSelect = document.getElementById('sortOptions');
+    const filterPills = document.querySelectorAll('.filter-pill');
+    
+    // Search button click
+    if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+    }
+    
+    // Search on Enter key
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    }
+    
+    // Sort options change
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            currentSortOption = e.target.value;
+            currentPage = 1; // Reset to first page
+            loadBlogPosts({
+                category: currentCategory,
+                page: currentPage,
+                sort: currentSortOption,
+                search: currentSearchTerm
+            });
+        });
+    }
+    
+    // Category filter pills
+    if (filterPills.length > 0) {
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                // Remove active class from all pills
+                filterPills.forEach(p => p.classList.remove('active'));
+                // Add active class to clicked pill
+                this.classList.add('active');
+                
+                // Get category
+                currentCategory = this.dataset.category || 'all';
+                currentPage = 1; // Reset to first page
+                
+                // Reload posts with new category
+                loadBlogPosts({
+                    category: currentCategory,
+                    page: currentPage,
+                    sort: currentSortOption,
+                    search: currentSearchTerm
+                });
+            });
+        });
+    }
+}
+
+// Add search function
+function performSearch() {
+    const searchInput = document.getElementById('blogSearch');
+    if (!searchInput) return;
+    
+    currentSearchTerm = searchInput.value.trim();
+    currentPage = 1; // Reset to first page
+    
+    loadBlogPosts({
+        category: currentCategory,
+        page: currentPage,
+        sort: currentSortOption,
+        search: currentSearchTerm
+    });
+}
+
+// Modify your existing loadBlogPosts function
 async function loadBlogPosts(options = {}) {
     try {
-        const { category = 'all', page = 1, sort = 'newest' } = options;
+        const { category = currentCategory, page = currentPage, sort = currentSortOption, search = currentSearchTerm } = options;
+        
+        // Update current values
+        currentCategory = category;
+        currentPage = page;
+        currentSortOption = sort;
+        currentSearchTerm = search;
         
         let query = supabase
             .from('blogs')
-            .select('*')
+            .select('*', { count: 'exact' }) // Add count for pagination
             .eq('status', 'published');
         
+        // Apply category filter
         if (category !== 'all') {
             const categoryMap = {
                 'career-clarity': 1,
@@ -38,6 +132,11 @@ async function loadBlogPosts(options = {}) {
             if (categoryMap[category]) {
                 query = query.eq('category_id', categoryMap[category]);
             }
+        }
+        
+        // Apply search filter if search term exists
+        if (search) {
+            query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`);
         }
         
         // Apply sorting
@@ -55,12 +154,24 @@ async function loadBlogPosts(options = {}) {
                 query = query.order('created_at', { ascending: false });
         }
         
+        // Get total count for pagination
+        const { count, error: countError } = await query;
+        if (countError) throw countError;
+        totalBlogs = count || 0;
+        
+        // Apply pagination
         const from = (page - 1) * 9;
         const to = from + 8;
         
         const { data: blogs, error } = await query.range(from, to);
         
         if (error) throw error;
+        
+        // Update pagination UI
+        updatePagination(totalBlogs, page);
+        
+        // Display search results message
+        updateSearchResultsMessage(blogs.length, totalBlogs, search);
         
         displayBlogPosts(blogs);
         
@@ -69,20 +180,201 @@ async function loadBlogPosts(options = {}) {
         
     } catch (error) {
         console.error('Error loading blog posts:', error);
+        showNoResults('Failed to load posts. Please try again later.');
     }
 }
 
+// Add function to update search results message
+function updateSearchResultsMessage(resultsCount, totalCount, searchTerm) {
+    const container = document.querySelector('.blog-main');
+    if (!container) return;
+    
+    // Remove existing message if any
+    const existingMessage = document.querySelector('.search-results-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Only show message if search term exists
+    if (searchTerm) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'search-results-message';
+        messageDiv.innerHTML = `
+            <p>
+                <i class="fas fa-search" style="margin-right: 8px;"></i>
+                Found <strong>${totalCount}</strong> result${totalCount !== 1 ? 's' : ''} 
+                for "<strong>${searchTerm}</strong>"
+                <button class="clear-search" style="margin-left: 12px; background: none; border: none; color: var(--primary-blue); cursor: pointer; text-decoration: underline;">
+                    Clear search
+                </button>
+            </p>
+        `;
+        
+        container.insertBefore(messageDiv, container.firstChild);
+        
+        // Add clear search functionality
+        const clearBtn = messageDiv.querySelector('.clear-search');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                const searchInput = document.getElementById('blogSearch');
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+                currentSearchTerm = '';
+                loadBlogPosts({
+                    category: currentCategory,
+                    page: 1,
+                    sort: currentSortOption,
+                    search: ''
+                });
+            });
+        }
+    }
+}
+
+// Add pagination update function
+function updatePagination(total, currentPage) {
+    const paginationContainer = document.getElementById('pagination');
+    if (!paginationContainer) return;
+    
+    const totalPages = Math.ceil(total / 9);
+    
+    if (totalPages <= 1) {
+        paginationContainer.innerHTML = '';
+        return;
+    }
+    
+    let paginationHtml = `
+        <button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="window.changePage(${currentPage - 1})">
+            <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <div class="page-numbers">
+    `;
+    
+    // Show page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            paginationHtml += `
+                <button class="page-number ${i === currentPage ? 'active' : ''}" onclick="window.changePage(${i})">
+                    ${i}
+                </button>
+            `;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+            paginationHtml += `<span class="page-dots">...</span>`;
+        }
+    }
+    
+    paginationHtml += `
+        </div>
+        <button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="window.changePage(${currentPage + 1})">
+            Next <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+    
+    paginationContainer.innerHTML = paginationHtml;
+}
+
+// Add change page function to window
+window.changePage = function(newPage) {
+    loadBlogPosts({
+        category: currentCategory,
+        page: newPage,
+        sort: currentSortOption,
+        search: currentSearchTerm
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// Add no results function
+function showNoResults(message) {
+    const container = document.getElementById('blogPosts');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="no-results" style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+            <i class="fas fa-search" style="font-size: 64px; color: #cbd5e0; margin-bottom: 20px;"></i>
+            <h3 style="color: #4a5568; margin-bottom: 10px;">No articles found</h3>
+            <p style="color: #718096; margin-bottom: 20px;">${message || 'Try adjusting your search or filter criteria.'}</p>
+            <button onclick="window.clearAllFilters()" style="background: var(--primary-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                Clear all filters
+            </button>
+        </div>
+    `;
+    
+    const paginationContainer = document.getElementById('pagination');
+    if (paginationContainer) {
+        paginationContainer.innerHTML = '';
+    }
+}
+
+// Add clear all filters function
+window.clearAllFilters = function() {
+    // Reset search input
+    const searchInput = document.getElementById('blogSearch');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    
+    // Reset category pills
+    const filterPills = document.querySelectorAll('.filter-pill');
+    filterPills.forEach(pill => {
+        if (pill.dataset.category === 'all') {
+            pill.classList.add('active');
+        } else {
+            pill.classList.remove('active');
+        }
+    });
+    
+    // Reset sort select
+    const sortSelect = document.getElementById('sortOptions');
+    if (sortSelect) {
+        sortSelect.value = 'newest';
+    }
+    
+    // Reset state and reload
+    currentSearchTerm = '';
+    currentCategory = 'all';
+    currentSortOption = 'newest';
+    currentPage = 1;
+    
+    loadBlogPosts({
+        category: 'all',
+        page: 1,
+        sort: 'newest',
+        search: ''
+    });
+};
+
+// Keep all your existing functions below this line
+// displayBlogPosts, loadPopularPosts, loadBlogDetail, etc.
+// ... (keep all your existing code from line 80 onwards)
+
+// Make sure to update the displayBlogPosts function to handle empty state
 function displayBlogPosts(blogs) {
     const container = document.getElementById('blogPosts');
     
     if (!blogs || blogs.length === 0) {
-        container.innerHTML = `
-            <div class="no-blogs" style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                <i class="fas fa-newspaper" style="font-size: 64px; color: #cbd5e0; margin-bottom: 20px;"></i>
-                <h3 style="color: #4a5568; margin-bottom: 10px;">No articles yet</h3>
-                <p style="color: #718096;">Check back soon for new content!</p>
-            </div>
-        `;
+        if (currentSearchTerm) {
+            container.innerHTML = `
+                <div class="no-results" style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-search" style="font-size: 64px; color: #cbd5e0; margin-bottom: 20px;"></i>
+                    <h3 style="color: #4a5568; margin-bottom: 10px;">No results found</h3>
+                    <p style="color: #718096; margin-bottom: 10px;">We couldn't find any articles matching "<strong>${currentSearchTerm}</strong>"</p>
+                    <p style="color: #718096; margin-bottom: 20px;">Try different keywords or clear your search</p>
+                    <button onclick="window.clearAllFilters()" style="background: var(--primary-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                        Clear search
+                    </button>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="no-blogs" style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-newspaper" style="font-size: 64px; color: #cbd5e0; margin-bottom: 20px;"></i>
+                    <h3 style="color: #4a5568; margin-bottom: 10px;">No articles yet</h3>
+                    <p style="color: #718096;">Check back soon for new content!</p>
+                </div>
+            `;
+        }
         return;
     }
     
@@ -121,6 +413,8 @@ function displayBlogPosts(blogs) {
         </article>
     `).join('');
 }
+
+// ... (keep the rest of your existing code - loadPopularPosts, loadBlogDetail, etc.)
 
 async function loadPopularPosts() {
     try {
@@ -767,3 +1061,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
