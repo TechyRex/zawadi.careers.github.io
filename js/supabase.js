@@ -224,3 +224,5 @@ export const subscribeNewsletter = async (email, name = '') => {
     
     return data;
 };
+
+

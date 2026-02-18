@@ -77,12 +77,19 @@ function initMobileNavigation() {
 
 function initCounters() {
     const counters = document.querySelectorAll('.stat-number');
-    
+
     counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-count'));
+        const dataCount = counter.getAttribute('data-count');
+
+        // 🚨 Skip counters that don't have data-count
+        if (!dataCount) return;
+
+        const target = parseInt(dataCount);
+        if (isNaN(target)) return;
+
         const increment = target / 100;
         let current = 0;
-        
+
         const updateCounter = () => {
             if (current < target) {
                 current += increment;
@@ -92,8 +99,7 @@ function initCounters() {
                 counter.textContent = target.toLocaleString();
             }
         };
-        
-        // Start counter when element is in viewport
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -102,10 +108,11 @@ function initCounters() {
                 }
             });
         });
-        
+
         observer.observe(counter);
     });
 }
+
 
 async function loadFeaturedBlogs() {
     try {

@@ -1,4 +1,4 @@
-import supabase, { getBlogs, getBlogById, addBlogView, getComments, addComment, toggleLike, getLikesCount } from './supabase.js';
+import supabase, { getBlogs, getBlogById, addBlogView } from './supabase.js';
 import { getCategoryName } from './main.js';
 
 // Add search state variables at the top
@@ -347,7 +347,6 @@ window.clearAllFilters = function() {
 
 // Keep all your existing functions below this line
 // displayBlogPosts, loadPopularPosts, loadBlogDetail, etc.
-// ... (keep all your existing code from line 80 onwards)
 
 // Make sure to update the displayBlogPosts function to handle empty state
 function displayBlogPosts(blogs) {
@@ -397,12 +396,6 @@ function displayBlogPosts(blogs) {
                     <div class="post-stats">
                         <span class="post-stat">
                             <i class="far fa-eye"></i> ${blog.views || 0}
-                        </span>
-                        <span class="post-stat">
-                            <i class="far fa-comment"></i> ${blog.comment_count || 0}
-                        </span>
-                        <span class="post-stat">
-                            <i class="far fa-heart"></i> ${blog.likes_count || 0}
                         </span>
                     </div>
                     <a href="blog-detail.html?id=${blog.id}" class="read-more-btn">
@@ -465,17 +458,8 @@ export async function loadBlogDetail(blogId) {
         // Display blog content
         displayBlogDetail(blog);
         
-        // Load comments
-        await loadComments(blogId);
-        
         // Load related articles
         await loadRelatedArticles(blog.category_id, blogId);
-        
-        // Setup comment form
-        setupCommentForm(blogId);
-        
-        // Setup like button
-        setupLikeButton(blogId);
         
         // Setup reading navigation
         setupReadingNavigation(blog.content);
@@ -619,175 +603,6 @@ function splitContentIntoPages(content, wordsPerPage = 300) {
     return pages.length > 0 ? pages : [content];
 }
 
-async function loadComments(blogId) {
-    try {
-        const comments = await getComments(blogId, { limit: 10 });
-        
-        const container = document.getElementById('commentsList');
-        const countElement = document.getElementById('commentsCount');
-        const noComments = document.getElementById('noComments');
-        
-        if (comments && comments.length > 0) {
-            if (noComments) noComments.style.display = 'none';
-            
-            container.innerHTML = comments.map(comment => `
-                <div class="comment">
-                    <div class="comment-header">
-                        <div class="comment-author">
-                            <div class="comment-avatar">
-                                ${comment.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div class="comment-author-info">
-                                <h4 class="comment-author-name">${comment.name}</h4>
-                                <span class="comment-time">${new Date(comment.created_at).toLocaleDateString()}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="comment-content">
-                        ${comment.content}
-                    </div>
-                    <div class="comment-actions">
-                        <button class="comment-reply-btn">
-                            <i class="fas fa-reply"></i> Reply
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            
-            countElement.textContent = `${comments.length} Comment${comments.length !== 1 ? 's' : ''}`;
-            
-            // Show load more button if there are more comments
-            const totalComments = await getTotalCommentsCount(blogId);
-            if (totalComments > comments.length) {
-                document.getElementById('loadMoreComments').style.display = 'block';
-            }
-            
-        } else {
-            if (noComments) noComments.style.display = 'block';
-            countElement.textContent = '0 Comments';
-        }
-        
-    } catch (error) {
-        console.error('Error loading comments:', error);
-    }
-}
-
-async function getTotalCommentsCount(blogId) {
-    const { count, error } = await supabase
-        .from('comments')
-        .select('*', { count: 'exact', head: true })
-        .eq('blog_id', blogId)
-        .eq('status', 'approved');
-    
-    if (error) throw error;
-    return count || 0;
-}
-
-function setupCommentForm(blogId) {
-    const form = document.getElementById('commentForm');
-    
-    if (!form) return;
-    
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('commenterName').value.trim();
-        const email = document.getElementById('commenterEmail').value.trim();
-        const content = document.getElementById('commentContent').value.trim();
-        
-        if (!name) {
-            alert('Please enter your name');
-            return;
-        }
-        
-        if (!content) {
-            alert('Please enter your comment');
-            return;
-        }
-        
-        try {
-            await addComment({
-                blogId: blogId,
-                name: name,
-                email: email || 'anonymous@example.com',
-                content: content
-            });
-            
-            alert('Comment submitted successfully! It will appear after approval.');
-            form.reset();
-            
-            // Reload comments
-            await loadComments(blogId);
-            
-        } catch (error) {
-            console.error('Error adding comment:', error);
-            alert('Error submitting comment. Please try again.');
-        }
-    });
-}
-
-function setupLikeButton(blogId) {
-    const likeBtn = document.getElementById('likeBtn');
-    const mobileLikeBtn = document.getElementById('mobileLikeBtn');
-    
-    if (!likeBtn) return;
-    
-    // Get initial like count
-    updateLikeCount(blogId);
-    
-    const handleLike = async () => {
-        try {
-            // For now, use a simple approach without user authentication
-            // In production, you might want to track by IP or use cookies
-            const userId = 'guest-' + Math.random().toString(36).substr(2, 9);
-            
-            const { liked } = await toggleLike(blogId, userId);
-            
-            // Update UI
-            const icon = likeBtn.querySelector('i');
-            const mobileIcon = mobileLikeBtn?.querySelector('i');
-            
-            if (liked) {
-                icon.className = 'fas fa-heart';
-                if (mobileIcon) mobileIcon.className = 'fas fa-heart';
-                likeBtn.classList.add('liked');
-                if (mobileLikeBtn) mobileLikeBtn.classList.add('liked');
-            } else {
-                icon.className = 'far fa-heart';
-                if (mobileIcon) mobileIcon.className = 'far fa-heart';
-                likeBtn.classList.remove('liked');
-                if (mobileLikeBtn) mobileLikeBtn.classList.remove('liked');
-            }
-            
-            // Update count
-            updateLikeCount(blogId);
-            
-        } catch (error) {
-            console.error('Error toggling like:', error);
-        }
-    };
-    
-    likeBtn.addEventListener('click', handleLike);
-    if (mobileLikeBtn) {
-        mobileLikeBtn.addEventListener('click', handleLike);
-    }
-}
-
-async function updateLikeCount(blogId) {
-    try {
-        const count = await getLikesCount(blogId);
-        
-        const countElement = document.getElementById('likeCount');
-        const mobileCount = document.querySelector('#mobileLikeBtn span');
-        
-        if (countElement) countElement.textContent = count;
-        if (mobileCount) mobileCount.textContent = count;
-        
-    } catch (error) {
-        console.error('Error getting like count:', error);
-    }
-}
-
 function setupReadingNavigation(content) {
     const pages = document.querySelectorAll('.blog-page');
     const prevBtn = document.getElementById('prevBtn');
@@ -888,7 +703,14 @@ function setupShareButtons(blog) {
             
             if (action === 'copy') {
                 navigator.clipboard.writeText(url)
-                    .then(() => alert('Link copied to clipboard!'))
+                    .then(() => {
+                        // Show temporary success message
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i>';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 2000);
+                    })
                     .catch(err => console.error('Error copying:', err));
                 return;
             }
@@ -1020,26 +842,6 @@ document.addEventListener('DOMContentLoaded', function() {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(0.8); }
         }
-        
-        .stat-item:hover i.fa-comment {
-            animation: commentBounce 0.6s;
-        }
-        
-        @keyframes commentBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-        
-        .stat-item:hover i.fa-heart {
-            animation: heartBeat 0.6s;
-        }
-        
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.2); }
-            50% { transform: scale(0.95); }
-            75% { transform: scale(1.1); }
-        }
     `;
     document.head.appendChild(style);
     
@@ -1060,6 +862,39 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Setup copy link functionality for mobile
+    const copyButtons = document.querySelectorAll('[id$="CopyBtn"]');
+    copyButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            navigator.clipboard.writeText(window.location.href)
+                .then(() => {
+                    // Show feedback
+                    const originalHtml = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+                    setTimeout(() => {
+                        this.innerHTML = originalHtml;
+                    }, 2000);
+                })
+                .catch(err => console.error('Error copying:', err));
+        });
+    });
+    
+    // Setup share functionality for mobile
+    const shareButtons = document.querySelectorAll('[id$="ShareBtn"]');
+    shareButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    url: window.location.href
+                }).catch(err => console.log('Share cancelled:', err));
+            } else {
+                // Fallback - copy link
+                navigator.clipboard.writeText(window.location.href)
+                    .then(() => alert('Link copied to clipboard!'))
+                    .catch(err => console.error('Error copying:', err));
+            }
+        });
+    });
 });
-
-

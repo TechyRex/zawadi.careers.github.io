@@ -61,10 +61,6 @@
                 <i class="fas fa-eye"></i>
                 <span id="viewCount">0</span>
             </div>
-            <button class="like-btn" id="likeBtn">
-                <i class="far fa-heart"></i>
-                <span id="likeCount">0</span>
-            </button>
         </div>
         
         <button class="nav-btn next-btn" id="nextBtn">
@@ -75,85 +71,23 @@
 
     <!-- Mobile Quick Actions -->
     <div class="mobile-quick-actions">
-        <button class="quick-action" id="mobileLikeBtn">
-            <i class="far fa-heart"></i>
-            <span>Like</span>
-        </button>
         <button class="quick-action" id="mobileShareBtn">
             <i class="fas fa-share-alt"></i>
             <span>Share</span>
         </button>
-        <button class="quick-action" id="mobileSaveBtn">
-            <i class="far fa-bookmark"></i>
-            <span>Save</span>
-        </button>
-        <button class="quick-action" id="mobileCommentBtn">
-            <i class="far fa-comment"></i>
-            <span>Comment</span>
+        <button class="quick-action" id="mobileCopyBtn">
+            <i class="fas fa-link"></i>
+            <span>Copy Link</span>
         </button>
     </div>
 
-    <!-- Comments Section -->
-    <section class="comments-section" id="commentsSection">
-        <div class="container">
-            <div class="comments-header">
-                <h2><i class="fas fa-comments"></i> Discussion</h2>
-                <div class="comments-stats">
-                    <span id="commentsCount">0 Comments</span>
-                    <button class="btn-refresh-comments" id="refreshComments">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Comment Form -->
-            <div class="comment-form-container">
-                <h3>Share Your Thoughts</h3>
-                <p>You can comment without creating an account</p>
-                <form id="commentForm" class="comment-form">
-                    <div class="commenter-info">
-                        <input type="text" id="commenterName" placeholder="Your Name" required>
-                        <input type="email" id="commenterEmail" placeholder="Your Email (optional)">
-                    </div>
-                    <textarea id="commentContent" placeholder="Share your perspective, ask questions, or add insights..." required></textarea>
-                    <div class="comment-form-actions">
-                        <button type="submit" class="btn-submit-comment">
-                            <i class="fas fa-paper-plane"></i> Post Comment
-                        </button>
-                        <div class="comment-guidelines">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Be respectful and constructive</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <!-- Comments List -->
-            <div class="comments-list" id="commentsList">
-                <!-- Comments will be loaded here -->
-                <div class="no-comments" id="noComments">
-                    <i class="far fa-comment-dots"></i>
-                    <h3>No comments yet</h3>
-                    <p>Be the first to share your thoughts!</p>
-                </div>
-            </div>
-            
-            <!-- Load More Comments -->
-            <div class="load-more-comments" id="loadMoreComments" style="display: none;">
-                <button class="btn-load-more" id="loadMoreBtn">
-                    <i class="fas fa-spinner fa-spin" id="loadingSpinner" style="display: none;"></i>
-                    Load More Comments
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Related Articles -->
+    <!-- Related Articles / Recent Posts -->
     <section class="related-articles">
         <div class="container">
-            <h2><i class="fas fa-link"></i> Related Articles</h2>
+            <h2><i class="fas fa-link"></i> Recent Articles</h2>
             <div class="related-grid" id="relatedArticles">
-                <!-- Related articles will be loaded here -->
+                <!-- Loading state for related articles -->
+                <div class="loading-related">Loading recent articles...</div>
             </div>
         </div>
     </section>
@@ -189,17 +123,13 @@
             <i class="fas fa-blog"></i>
             <span>Blog</span>
         </a>
-        <a href="#" class="nav-icon" id="detailSaveBtn">
-            <i class="far fa-bookmark"></i>
-            <span>Save</span>
-        </a>
-        <button class="nav-icon" id="detailCommentTrigger">
-            <i class="far fa-comment"></i>
-            <span>Comment</span>
-        </button>
         <button class="nav-icon" id="detailShareBtn">
             <i class="fas fa-share-alt"></i>
             <span>Share</span>
+        </button>
+        <button class="nav-icon" id="detailCopyBtn">
+            <i class="fas fa-link"></i>
+            <span>Copy Link</span>
         </button>
     </div>
 
@@ -207,14 +137,16 @@
     <script src="js/main.js" type="module"></script>
     <script src="js/blog.js" type="module"></script>
     <script type="module">
+    import supabase from './js/supabase.js';
+    import { getCategoryName } from './js/main.js';
+
     // Get blog ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const blogId = urlParams.get('id');
     
+    // Load main blog detail
     if (blogId) {
-        // Import and initialize blog detail
         import('./js/blog.js').then(module => {
-            // Call the loadBlogDetail function directly
             module.loadBlogDetail(blogId);
         }).catch(error => {
             console.error('Error loading blog module:', error);
@@ -225,6 +157,80 @@
         document.getElementById('errorState').style.display = 'flex';
         document.getElementById('loadingState').style.display = 'none';
     }
-</script>
+
+    // Load recent articles (excluding current blog)
+    async function loadRecentArticles() {
+        try {
+            const relatedGrid = document.getElementById('relatedArticles');
+            
+            let query = supabase
+                .from('blogs')
+                .select('*')
+                .eq('status', 'published')
+                .order('created_at', { ascending: false })
+                .limit(3); // Show 3 recent articles
+
+            // Exclude current blog if we're on a detail page
+            if (blogId) {
+                query = query.neq('id', blogId);
+            }
+
+            const { data: blogs, error } = await query;
+
+            if (error) throw error;
+            
+            if (!blogs || blogs.length === 0) {
+                relatedGrid.innerHTML = '<p class="no-articles">No recent articles found.</p>';
+                return;
+            }
+
+            // Display recent articles
+            relatedGrid.innerHTML = blogs.map(blog => {
+                const imageUrl = blog.image_url || blog.featured_image || blog.thumbnail;
+                const formattedDate = new Date(blog.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                const excerpt = blog.excerpt || (blog.content ? blog.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...' : '');
+                const categoryName = getCategoryName(blog.category_id);
+                
+                return `
+                    <a href="blog-detail.html?id=${blog.id}" class="related-card">
+                        <div class="related-image">
+                            ${imageUrl ? 
+                                `<img src="${imageUrl}" alt="${blog.title}" loading="lazy">` : 
+                                `<div class="related-image-placeholder">${categoryName[0]}</div>`
+                            }
+                        </div>
+                        <div class="related-content">
+                            <span class="related-category">${categoryName}</span>
+                            <h3 class="related-title">${blog.title}</h3>
+                            <div class="related-meta">
+                                <span><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                                <span><i class="far fa-clock"></i> ${blog.read_time || '3'} min read</span>
+                            </div>
+                            <p class="related-excerpt">${excerpt}</p>
+                            <span class="related-read-more">
+                                Read Article <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+        } catch (error) {
+            console.error('Error loading recent articles:', error);
+            document.getElementById('relatedArticles').innerHTML = 
+                '<p class="error-articles">Failed to load recent articles.</p>';
+        }
+    }
+
+    // Load recent articles when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadRecentArticles();
+    });
+
+    </script>
 </body>
 </html>

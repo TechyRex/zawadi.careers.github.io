@@ -424,7 +424,7 @@
         .search-input-group {
             display: flex;
             gap: 10px;
-            background: white;
+            background: #374151;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             overflow: hidden;
@@ -651,7 +651,7 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #718096;
+            color: #4b5563;
             font-size: 12px;
             gap: 4px;
             padding: 4px 0;
@@ -1150,23 +1150,17 @@
 
     <!-- Search Functionality Script -->
     <!-- Search Functionality Script - Updated to work with Supabase -->
+    <!-- Search Functionality Script - Integrated with your existing code -->
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-// Initialize Supabase client with your credentials
-// IMPORTANT: Replace these with your actual Supabase URL and anon key
-const supabaseUrl = 'https://xtubniixvmwluwybbpos.supabase.co'; // Get this from your Supabase project settings
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0dWJuaWl4dm13bHV3eWJicG9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1ODc4MDUsImV4cCI6MjA4NjE2MzgwNX0.P278_vaPqKyPcjlaFVqmFHJC6OcqZU30gk2b5SyCOI4'; // Get this from your Supabase project settings
+// Initialize Supabase client
+const supabaseUrl = 'https://xtubniixvmwluwybbpos.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0dWJuaWl4dm13bHV3eWJicG9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1ODc4MDUsImV4cCI6MjA4NjE2MzgwNX0.P278_vaPqKyPcjlaFVqmFHJC6OcqZU30gk2b5SyCOI4';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Global variables
-let currentFilter = 'all';
-let allArticles = [];
-let searchTimeout;
-let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-
-// Category mapping for display
+// Category mapping
 const categoryMap = {
     1: 'Career Clarity',
     2: 'Skill Development',
@@ -1177,86 +1171,67 @@ const categoryMap = {
     7: 'Stories'
 };
 
+// Search state variables (matching your script pattern)
+let currentSearchTerm = '';
+let currentFilter = 'all';
+let currentPage = 1;
+let totalResults = 0;
+let allArticles = [];
+
 // Open search modal
 window.openSearch = function() {
     const modal = document.getElementById('searchModal');
+    if (!modal) return;
+    
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Clear previous results and input
-    document.getElementById('searchInput').value = '';
-    document.getElementById('searchResults').innerHTML = '';
-    document.getElementById('suggestionsContainer').classList.remove('active');
+    // Clear previous results
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    if (searchInput) {
+        searchInput.value = '';
+        currentSearchTerm = '';
+    }
+    if (searchResults) searchResults.innerHTML = '';
+    
+    // Reset filter buttons
+    document.querySelectorAll('.search-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector('[onclick="filterSearch(\'all\')"]')?.classList.add('active');
+    currentFilter = 'all';
     
     // Focus on input
     setTimeout(() => {
-        document.getElementById('searchInput').focus();
+        if (searchInput) searchInput.focus();
     }, 100);
     
     // Load recent articles
     loadRecentArticles();
-    displayRecentSearches();
 };
 
 // Close search modal
 window.closeSearch = function() {
     const modal = document.getElementById('searchModal');
+    if (!modal) return;
+    
     modal.classList.remove('active');
     document.body.style.overflow = '';
-    document.getElementById('searchInput').value = '';
-    document.getElementById('searchResults').innerHTML = '';
-    document.getElementById('suggestionsContainer').classList.remove('active');
+    
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    if (searchInput) searchInput.value = '';
+    if (searchResults) searchResults.innerHTML = '';
+    currentSearchTerm = '';
 };
 
-// Display recent searches
-function displayRecentSearches() {
-    const recentContainer = document.getElementById('recentSearches');
-    if (recentSearches.length > 0) {
-        recentContainer.innerHTML = `
-            <span><i class="fas fa-history"></i> Recent:</span>
-            ${recentSearches.map(term => `
-                <span class="recent-search-tag" onclick="useRecentSearch('${term.replace(/'/g, "\\'")}')">
-                    ${term}
-                </span>
-            `).join('')}
-        `;
-    } else {
-        recentContainer.innerHTML = '';
-    }
-}
-
-// Use recent search term
-window.useRecentSearch = function(term) {
-    document.getElementById('searchInput').value = term;
-    performSearch();
-};
-
-// Add to recent searches
-function addToRecentSearches(term) {
-    if (!term || term.trim() === '') return;
-    
-    // Remove if already exists (case insensitive)
-    recentSearches = recentSearches.filter(t => t.toLowerCase() !== term.toLowerCase());
-    
-    // Add to beginning
-    recentSearches.unshift(term);
-    
-    // Keep only last 5 searches
-    if (recentSearches.length > 5) {
-        recentSearches.pop();
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
-    
-    // Update display
-    displayRecentSearches();
-}
-
-// Load recent articles
+// Load recent articles (like your loadBlogPosts but for search modal)
 async function loadRecentArticles() {
     try {
         const searchResults = document.getElementById('searchResults');
+        if (!searchResults) return;
+        
         searchResults.innerHTML = `
             <div class="search-loading">
                 <i class="fas fa-spinner fa-spin"></i>
@@ -1267,6 +1242,7 @@ async function loadRecentArticles() {
         const { data: articles, error } = await supabase
             .from('blogs')
             .select('*')
+            .eq('status', 'published')
             .order('created_at', { ascending: false })
             .limit(10);
 
@@ -1275,7 +1251,7 @@ async function loadRecentArticles() {
         allArticles = articles || [];
         
         if (articles && articles.length > 0) {
-            displaySearchResults(articles);
+            displaySearchResults(articles, 'Recent Articles');
         } else {
             searchResults.innerHTML = `
                 <div class="no-search-results">
@@ -1287,102 +1263,35 @@ async function loadRecentArticles() {
         }
     } catch (error) {
         console.error('Error loading recent articles:', error);
-        document.getElementById('searchResults').innerHTML = `
-            <div class="no-search-results">
-                <i class="fas fa-exclamation-circle"></i>
-                <h3>Error loading articles</h3>
-                <p>Please check your Supabase connection and try again.</p>
-                <p style="font-size: 12px; color: #e53e3e;">${error.message}</p>
-            </div>
-        `;
-    }
-}
-
-// Get suggestions as user types
-async function getSuggestions(searchTerm) {
-    if (!searchTerm || searchTerm.length < 2) {
-        document.getElementById('suggestionsContainer').classList.remove('active');
-        return;
-    }
-
-    try {
-        const { data: suggestions, error } = await supabase
-            .from('blogs')
-            .select('id, title, category_id, excerpt')
-            .or(`title.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%`)
-            .order('created_at', { ascending: false })
-            .limit(5);
-
-        if (error) throw error;
-
-        const suggestionsContainer = document.getElementById('suggestionsContainer');
-        
-        if (suggestions && suggestions.length > 0) {
-            suggestionsContainer.innerHTML = suggestions.map(suggestion => {
-                const categoryName = categoryMap[suggestion.category_id] || 'General';
-                // Highlight the matching text
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                const highlightedTitle = suggestion.title.replace(regex, '<span class="suggestion-highlight">$1</span>');
-                
-                return `
-                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.id}')">
-                        <i class="fas fa-file-alt"></i>
-                        <div class="suggestion-content">
-                            <div class="suggestion-title">${highlightedTitle}</div>
-                            <div class="suggestion-subtitle">
-                                <span class="suggestion-category">${categoryName}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            suggestionsContainer.classList.add('active');
-        } else {
-            suggestionsContainer.innerHTML = `
-                <div class="suggestion-item" style="justify-content: center; color: #718096;">
-                    <i class="fas fa-search"></i>
-                    <span>No suggestions found for "${searchTerm}"</span>
+        const searchResults = document.getElementById('searchResults');
+        if (searchResults) {
+            searchResults.innerHTML = `
+                <div class="no-search-results">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Error loading articles</h3>
+                    <p>Please try again later.</p>
                 </div>
             `;
-            suggestionsContainer.classList.add('active');
         }
-    } catch (error) {
-        console.error('Error getting suggestions:', error);
-        document.getElementById('suggestionsContainer').innerHTML = `
-            <div class="suggestion-item" style="justify-content: center; color: #e53e3e;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>Error loading suggestions</span>
-            </div>
-        `;
-        document.getElementById('suggestionsContainer').classList.add('active');
     }
 }
 
-// Select suggestion
-window.selectSuggestion = function(articleId) {
-    window.location.href = `blog-detail.html?id=${articleId}`;
-    closeSearch();
-};
-
-// Perform search
+// Perform search (matching your performSearch function pattern)
 window.performSearch = async function() {
-    const searchTerm = document.getElementById('searchInput').value.trim();
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
     
-    // Hide suggestions
-    document.getElementById('suggestionsContainer').classList.remove('active');
+    if (!searchInput || !searchResults) return;
     
-    // Add to recent searches
-    if (searchTerm) {
-        addToRecentSearches(searchTerm);
-    }
+    const searchTerm = searchInput.value.trim();
+    currentSearchTerm = searchTerm;
+    currentPage = 1; // Reset to first page
     
     if (!searchTerm) {
         loadRecentArticles();
         return;
     }
 
-    const searchResults = document.getElementById('searchResults');
-    
     // Show loading state
     searchResults.innerHTML = `
         <div class="search-loading">
@@ -1392,25 +1301,31 @@ window.performSearch = async function() {
     `;
 
     try {
-        // Search in multiple fields
+        // Search in multiple fields (like your loadBlogPosts pattern)
         const { data: articles, error } = await supabase
             .from('blogs')
             .select('*')
+            .eq('status', 'published')
             .or(`title.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`)
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
         allArticles = articles || [];
+        totalResults = articles?.length || 0;
         
         if (articles && articles.length > 0) {
-            displaySearchResults(articles);
+            displaySearchResults(articles, `Search Results for "${searchTerm}" (${totalResults})`);
         } else {
             searchResults.innerHTML = `
                 <div class="no-search-results">
                     <i class="fas fa-search"></i>
                     <h3>No articles found for "${searchTerm}"</h3>
                     <p>Try searching with different keywords</p>
+                    <button onclick="document.getElementById('searchInput').value = ''; loadRecentArticles();" 
+                            style="margin-top: 15px; padding: 8px 20px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Clear Search
+                    </button>
                 </div>
             `;
         }
@@ -1420,30 +1335,44 @@ window.performSearch = async function() {
             <div class="no-search-results">
                 <i class="fas fa-exclamation-circle"></i>
                 <h3>Error performing search</h3>
-                <p>Please check your Supabase connection and try again.</p>
-                <p style="font-size: 12px; color: #e53e3e;">${error.message}</p>
+                <p>Please try again later.</p>
             </div>
         `;
     }
 };
 
-// Filter search results
+// Filter search results (matching your filter pattern)
 window.filterSearch = function(filter, event) {
+    if (!event) {
+        // Find the button if event not provided
+        const buttons = document.querySelectorAll('.search-filter-btn');
+        buttons.forEach(btn => {
+            if (btn.getAttribute('onclick')?.includes(filter)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    } else {
+        // Update active filter button
+        document.querySelectorAll('.search-filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+    
     currentFilter = filter;
     
-    // Update active filter button
-    document.querySelectorAll('.search-filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    displaySearchResults(allArticles);
+    if (allArticles.length > 0) {
+        displaySearchResults(allArticles, currentFilter === 'all' ? 'All Results' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Results`);
+    }
 };
 
 // Display search results
-function displaySearchResults(articles) {
+function displaySearchResults(articles, title = 'Search Results') {
     const searchResults = document.getElementById('searchResults');
-    
+    if (!searchResults) return;
+
     if (!articles || articles.length === 0) {
         searchResults.innerHTML = `
             <div class="no-search-results">
@@ -1455,22 +1384,13 @@ function displaySearchResults(articles) {
         return;
     }
 
+    // Apply filter if not 'all' (you can customize this based on your data structure)
     let filteredArticles = articles;
-    
-    // Apply filter if not 'all'
     if (currentFilter !== 'all') {
-        filteredArticles = articles.filter(article => article.type === currentFilter);
-    }
-
-    if (filteredArticles.length === 0) {
-        searchResults.innerHTML = `
-            <div class="no-search-results">
-                <i class="fas fa-filter"></i>
-                <h3>No ${currentFilter} found</h3>
-                <p>Try a different filter or search term</p>
-            </div>
-        `;
-        return;
+        // Example: filter by article type if you have that field
+        // filteredArticles = articles.filter(article => article.type === currentFilter);
+        // For now, just show all
+        filteredArticles = articles;
     }
 
     const categoryColors = {
@@ -1483,88 +1403,112 @@ function displaySearchResults(articles) {
         7: 'linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%)'
     };
 
-    searchResults.innerHTML = filteredArticles.map(article => {
-        const categoryName = categoryMap[article.category_id] || 'General';
-        const fallbackGradient = categoryColors[article.category_id] || 'linear-gradient(135deg, #0066cc 0%, #00b3ff 100%)';
-        const imageUrl = article.image_url || article.thumbnail || article.featured_image || null;
-        const titleFirstLetter = article.title ? article.title.charAt(0).toUpperCase() : 'A';
+    searchResults.innerHTML = `
+        <div style="padding: 10px 15px; background: #edf2f7; border-radius: 8px; margin-bottom: 15px; font-weight: 600; color: #2d3748;">
+            <i class="fas fa-search" style="margin-right: 8px;"></i>
+            ${title} (${filteredArticles.length})
+        </div>
+        ${filteredArticles.map(article => {
+            const categoryName = categoryMap[article.category_id] || 'General';
+            const fallbackGradient = categoryColors[article.category_id] || 'linear-gradient(135deg, #0066cc 0%, #00b3ff 100%)';
+            const imageUrl = article.image_url || article.thumbnail || article.featured_image || null;
+            const titleFirstLetter = article.title ? article.title.charAt(0).toUpperCase() : 'A';
 
-        return `
-            <a href="blog-detail.html?id=${article.id}" class="search-result-item" onclick="closeSearch()">
-                <div class="result-image" style="background: ${imageUrl ? `url('${imageUrl}')` : fallbackGradient}; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
-                    ${!imageUrl ? `<span style="color: white; font-weight: bold; font-size: 24px;">${titleFirstLetter}</span>` : ''}
-                </div>
-                <div class="result-content">
-                    <div class="result-title">${article.title}</div>
-                    <div class="result-category">${categoryName}</div>
-                    <div class="result-excerpt">${article.excerpt || (article.content ? article.content.substring(0, 120) + '...' : 'No description available')}</div>
-                    <div style="font-size: 11px; color: #a0aec0; margin-top: 5px;">
-                        <i class="far fa-clock"></i> ${article.read_time || '5'} min read
+            return `
+                <a href="blog-detail.html?id=${article.id}" class="search-result-item" onclick="closeSearch()">
+                    <div class="result-image" style="background: ${imageUrl ? `url('${imageUrl}') center/cover no-repeat` : fallbackGradient}; display: flex; align-items: center; justify-content: center;">
+                        ${!imageUrl ? `<span style="color: white; font-weight: bold; font-size: 24px;">${titleFirstLetter}</span>` : ''}
                     </div>
-                </div>
-            </a>
-        `;
-    }).join('');
+                    <div class="result-content">
+                        <div class="result-title">${article.title}</div>
+                        <div class="result-category">${categoryName}</div>
+                        <div class="result-excerpt">${article.excerpt || (article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 120) + '...' : 'No description available')}</div>
+                        <div style="font-size: 11px; color: #a0aec0; margin-top: 5px;">
+                            <i class="far fa-calendar-alt"></i> ${new Date(article.created_at).toLocaleDateString()} • 
+                            <i class="far fa-clock"></i> ${article.read_time || '5'} min read
+                        </div>
+                    </div>
+                </a>
+            `;
+        }).join('')}
+    `;
 }
 
-// Set up input event listener for suggestions
+// Add suggestions container to the modal (if not present)
+function addSuggestionsContainer() {
+    const searchInputWrapper = document.querySelector('.search-input-wrapper');
+    if (searchInputWrapper && !document.getElementById('suggestionsContainer')) {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.id = 'suggestionsContainer';
+        suggestionsDiv.className = 'suggestions-container';
+        suggestionsDiv.style.cssText = `
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 5px;
+        `;
+        searchInputWrapper.style.position = 'relative';
+        searchInputWrapper.appendChild(suggestionsDiv);
+    }
+}
+
+// Setup event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            clearTimeout(searchTimeout);
-            const searchTerm = e.target.value.trim();
-            
-            if (searchTerm.length >= 2) {
-                searchTimeout = setTimeout(() => {
-                    getSuggestions(searchTerm);
-                }, 300); // Debounce for 300ms
-            } else {
-                document.getElementById('suggestionsContainer').classList.remove('active');
-            }
-        });
-
-        // Handle keyboard navigation in suggestions
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                const firstSuggestion = document.querySelector('.suggestion-item');
-                if (firstSuggestion) {
-                    firstSuggestion.focus();
-                }
-            }
-        });
-    }
-});
-
-// Close modal when clicking outside
-document.getElementById('searchModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeSearch();
-    }
-});
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeSearch();
-    }
-});
-
-// Click outside suggestions to close
-document.addEventListener('click', function(e) {
-    const suggestions = document.getElementById('suggestionsContainer');
+    // Add suggestions container
+    addSuggestionsContainer();
+    
+    const modal = document.getElementById('searchModal');
     const searchInput = document.getElementById('searchInput');
     
-    if (suggestions && !suggestions.contains(e.target) && e.target !== searchInput) {
-        suggestions.classList.remove('active');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSearch();
+            }
+        });
     }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeSearch();
+        }
+    });
+
+    // Setup search input for real-time suggestions and Enter key
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    }
+
+    // Initialize filter buttons
+    const filterButtons = document.querySelectorAll('.search-filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const filter = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1] || 'all';
+            filterSearch(filter, e);
+        });
+    });
 });
 
-// Make functions available globally
+// Make category name function available globally
 window.getCategoryName = function(categoryId) {
     return categoryMap[categoryId] || 'General';
 };
 </script>
+
+
 </body>
 </html>

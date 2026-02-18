@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>All Blog Categories - Zawadi Careers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+    <style>
+        /* === base & reset (same patterns) === */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f9fafb;
+            margin: 0;
+            overflow-x: hidden;
+            width: 100%;
+        }
+        :root {
+            --primary-blue: #0066cc;
+            --secondary-blue: #00b3ff;
+            --dark-blue: #0a2540;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --success: #10b981;
+        }
+
+        /* === navigation (same) === */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo { font-weight: 700; color: var(--primary-blue); font-size: 1.5rem; text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: #374151; font-weight: 500; }
+        .nav-links a:hover { color: var(--primary-blue); }
+
+        /* === hero (exactly same) === */
+        .categories-hero {
+            background: linear-gradient(135deg, #0a2540 0%, #1a365d 100%);
+            color: white;
+            padding: 60px 16px;
+            text-align: center;
+            width: 100%;
+        }
+        .categories-hero h1 {
+            font-size: clamp(28px, 8vw, 48px);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        .categories-hero p {
+            font-size: clamp(14px, 4vw, 18px);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+            padding: 0 10px;
+        }
+
+        /* === MAIN LAYOUT: two columns on desktop (categories grid + sidebar) === */
+        .categories-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        /* --- left column: detailed category cards (same as before) --- */
+        .categories-grid-detailed {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+        .category-card-detailed {
+            background: white;
+            border-radius: 20px;
+            padding: 24px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+            width: 100%;
+            overflow: hidden;
+        }
+        .category-card-detailed:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #0066cc;
+        }
+        .category-icon-large {
+            width: 70px; height: 70px;
+            background: linear-gradient(135deg, #0066cc 0%, #00b3ff 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .category-content { width: 100%; }
+        .category-content h2 {
+            font-size: clamp(20px, 6vw, 24px);
+            margin-bottom: 12px;
+            color: #1a202c;
+        }
+        .category-description {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: clamp(14px, 4vw, 16px);
+        }
+        .category-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 12px 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .stat-number {
+            display: block;
+            font-size: clamp(18px, 5vw, 24px);
+            font-weight: 700;
+            color: #0066cc;
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: clamp(11px, 3vw, 14px);
+            color: #718096;
+        }
+        .category-topics { margin-bottom: 20px; }
+        .category-topics h4 { font-size: 16px; margin-bottom: 12px; color: #2d3748; }
+        .topics-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .topic-tag {
+            background: #edf2f7;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: clamp(12px, 3.5vw, 14px);
+            color: #4a5568;
+            white-space: nowrap;
+        }
+        .category-action { text-align: center; width: 100%; }
+        .btn-explore-category {
+            background: linear-gradient(90deg, #0066cc 0%, #00b3ff 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: clamp(14px, 4vw, 16px);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 280px;
+            text-decoration: none;
+        }
+        .btn-explore-category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Category-specific icon colors */
+        .category-1 .category-icon-large { background: linear-gradient(135deg, #0066cc 0%, #00b3ff 100%); }
+        .category-2 .category-icon-large { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); }
+        .category-3 .category-icon-large { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+        .category-4 .category-icon-large { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); }
+        .category-5 .category-icon-large { background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); }
+        .category-6 .category-icon-large { background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); }
+        .category-7 .category-icon-large { background: linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%); }
+
+        /* --- RIGHT COLUMN: SIDEBAR WIDGET (exactly as requested) --- */
+        .sidebar-layout {
+            width: 100%;
+        }
+        .sidebar-widget {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 30px;
+        }
+        .sidebar-widget h3 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            color: #0a2540;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #eef2f6;
+            padding-bottom: 16px;
+        }
+        .sidebar-widget h3 i {
+            color: var(--primary-blue);
+            font-size: 24px;
+        }
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: #f8fafd;
+            border-radius: 14px;
+            text-decoration: none;
+            color: #2d3748;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .category-item:hover {
+            background: white;
+            border-color: var(--primary-blue);
+            box-shadow: 0 6px 12px rgba(0,102,204,0.08);
+            transform: translateX(4px);
+        }
+        .category-name {
+            font-size: 16px;
+        }
+        .category-count {
+            background: var(--primary-blue);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        /* different subtle colors for each count (just for fun) */
+        .category-item:nth-child(1) .category-count { background: #0066cc; }
+        .category-item:nth-child(2) .category-count { background: #10b981; }
+        .category-item:nth-child(3) .category-count { background: #f59e0b; }
+        .category-item:nth-child(4) .category-count { background: #8b5cf6; }
+        .category-item:nth-child(5) .category-count { background: #ef4444; }
+        .category-item:nth-child(6) .category-count { background: #ec4899; }
+        .category-item:nth-child(7) .category-count { background: #14b8a6; }
+
+        /* === search modal (exactly as original, kept functional) === */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        .search-modal.active { display: block; }
+        .search-container {
+            max-width: 800px;
+            margin: 80px auto 20px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .search-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #0a2540 0%, #1a365d 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .search-header h2 { margin: 0; font-size: 24px; }
+        .close-search {
+            background: none; border: none; color: white; font-size: 24px; cursor: pointer;
+            width: 40px; height: 40px; border-radius: 50%;
+        }
+        .close-search:hover { background: rgba(255,255,255,0.1); }
+        .search-input-wrapper { padding: 20px; background: #f7fafc; }
+        .search-input-group {
+            display: flex; gap: 10px; background: white; border: 2px solid #e2e8f0;
+            border-radius: 12px; overflow: hidden;
+        }
+        .search-input-group:focus-within { border-color: #0066cc; }
+        .search-input-group input {
+            flex: 1; padding: 15px; border: none; outline: none; font-size: 16px;
+        }
+        .search-input-group button {
+            background: #0066cc; color: white; border: none; padding: 0 25px;
+            cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;
+        }
+        .search-filters { padding: 15px 20px; background: #f7fafc; border-top: 1px solid #e2e8f0; }
+        .filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; }
+        .search-filter-btn {
+            padding: 8px 16px; border: 1px solid #e2e8f0; background: white;
+            border-radius: 30px; cursor: pointer; font-size: 14px;
+        }
+        .search-filter-btn.active { background: #0066cc; color: white; border-color: #0066cc; }
+        .search-results { padding: 20px; max-height: 500px; overflow-y: auto; }
+        .search-result-item {
+            display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid #e2e8f0;
+            text-decoration: none; color: inherit; transition: background 0.3s;
+        }
+        .search-result-item:hover { background: #f7fafc; }
+        .result-image {
+            width: 80px; height: 80px; border-radius: 10px; background: linear-gradient(135deg, #0066cc, #00b3ff);
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;
+        }
+        .result-content { flex: 1; min-width: 0; }
+        .result-title { font-weight: 600; color: #1a202c; }
+        .result-category { font-size: 12px; color: #0066cc; font-weight: 600; }
+        .result-excerpt { font-size: 13px; color: #718096; }
+        .search-loading { text-align: center; padding: 40px; color: #718096; }
+        .no-search-results { text-align: center; padding: 40px 20px; color: #718096; }
+
+        /* mobile bottom navigation (same) */
+        .mobile-bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            padding: 8px 12px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            border-top: 1px solid #e2e8f0;
+        }
+        .nav-icon {
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: #4b5563; font-size: 12px; gap: 4px;
+        }
+        .nav-icon i { font-size: 20px; }
+        .nav-icon.active { color: #0066cc; }
+        .footer { margin-bottom: 70px; background: #0a2540; color: white; text-align: center; padding: 2rem; }
+
+        /* desktop two-column layout */
+        @media (min-width: 1000px) {
+            .categories-layout {
+                grid-template-columns: 2fr 1fr;
+                align-items: start;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 999px) {
+            .categories-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-widget {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+        @media (min-width: 768px) {
+            .categories-grid-detailed { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+            .mobile-bottom-nav { display: none; }
+            .footer { margin-bottom: 0; }
+        }
+
+        /* ===== NEWSLETTER POPUP – REFINED TO FIT MOBILE FRAME PERFECTLY ===== */
+        .newsletter-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 12px; /* keeps safe distance from screen edges */
+        }
+
+        .newsletter-popup.show {
+            display: flex;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 28px;
+            padding: clamp(20px, 5vw, 32px) clamp(18px, 4vw, 32px);
+            max-width: 440px;          /* slightly narrower for compactness */
+            width: 100%;
+            max-height: 90vh;           /* never exceeds viewport */
+            overflow-y: auto;            /* scroll if needed */
+            position: relative;
+            animation: popupIn 0.3s ease-out;
+            box-shadow: 0 25px 50px -8px rgba(0,0,0,0.3);
+            margin: auto;
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--gray-100);
+            border: none;
+            font-size: 22px;
+            color: var(--gray-600);
+            cursor: pointer;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .close-popup:hover {
+            background: var(--gray-200);
+            transform: rotate(90deg);
+        }
+
+        .popup-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .popup-logo {
+            height: 44px;
+            width: auto;
+            margin-bottom: 14px;
+            object-fit: contain;
+        }
+
+        .popup-header h3 {
+            font-size: clamp(20px, 5vw, 24px);
+            color: var(--dark-blue);
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .popup-content p {
+            margin-bottom: 16px;
+            color: var(--gray-600);
+            font-size: clamp(14px, 3.5vw, 15px);
+            text-align: center;
+        }
+
+        .popup-content ul {
+            list-style: none;
+            margin: 0 0 20px 0;
+            padding: 0;
+        }
+
+        .popup-content li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(14px, 3.5vw, 15px);
+            color: #1f2937;
+        }
+
+        .popup-content li i {
+            color: var(--success);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;      /* stacks vertically on all mobile */
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-form input {
+            width: 100%;
+            padding: 15px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .btn-subscribe {
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;                /* full width for easy tapping */
+            white-space: nowrap;
+        }
+
+        .btn-subscribe:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        .privacy-note {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* small extra polish for very narrow devices */
+        @media (max-width: 380px) {
+            .popup-content {
+                padding: 18px 14px;
+            }
+            .close-popup {
+                top: 10px;
+                right: 10px;
+                width: 34px;
+                height: 34px;
+                font-size: 20px;
+            }
+            .popup-logo {
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+   <!-- Newsletter Popup -->
+    <div id="newsletterPopup" class="newsletter-popup">
+        <div class="popup-content">
+            <button class="close-popup">&times;</button>
+            <div class="popup-header">
+                <img src="assets/images/zawadi-logo.png" alt="Zawadi Logo" class="popup-logo">
+                <h3>Stay Updated with Career Opportunities!</h3>
+            </div>
+            <p>Subscribe to our newsletter for:</p>
+            <ul>
+                <li><i class="fas fa-check"></i> Latest job openings in Africa</li>
+                <li><i class="fas fa-check"></i> Career development tips</li>
+                <li><i class="fas fa-check"></i> Skill-building resources</li>
+                <li><i class="fas fa-check"></i> Industry insights</li>
+            </ul>
+            <form id="newsletterForm" class="newsletter-form">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit" class="btn-subscribe">Subscribe Now</button>
+            </form>
+            <p class="privacy-note">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </div>
+
+    <!-- Hero (same) -->
+    <section class="categories-hero">
+        <div class="container">
+            <h1>All Blog Categories</h1>
+            <p>Explore our comprehensive career categories. Each one is packed with insights, guides, and opportunities tailored to your professional journey.</p>
+        </div>
+    </section>
+
+    <!-- Two-column layout: left = detailed cards, right = category widget -->
+    <div class="categories-layout">
+        <!-- LEFT COLUMN: detailed category cards (all categories) -->
+        <section class="categories-grid-detailed" id="allCategoriesGrid">
+            <!-- injected from JS -->
+        </section>
+
+        <!-- RIGHT COLUMN: EXACT SIDEBAR WIDGET with category links -->
+        <aside class="sidebar-layout">
+            <div class="sidebar-widget categories-widget">
+                <h3><i class="fas fa-folder"></i> Categories</h3>
+                <div class="category-list">
+                    <a href="categories.html?category=career-clarity" class="category-item">
+                        <span class="category-name">Career Clarity</span>
+                        <span class="category-count">45</span>
+                    </a>
+                    <a href="categories.html?category=skill-development" class="category-item">
+                        <span class="category-name">Skill Development</span>
+                        <span class="category-count">78</span>
+                    </a>
+                    <a href="categories.html?category=job-search" class="category-item">
+                        <span class="category-name">Job Search</span>
+                        <span class="category-count">62</span>
+                    </a>
+                    <a href="categories.html?category=opportunities" class="category-item">
+                        <span class="category-name">Opportunities</span>
+                        <span class="category-count">120+</span>
+                    </a>
+                    <a href="categories.html?category=professionals" class="category-item">
+                        <span class="category-name">Professionals</span>
+                        <span class="category-count">54</span>
+                    </a>
+                    <a href="categories.html?category=companies" class="category-item">
+                        <span class="category-name">Companies</span>
+                        <span class="category-count">36</span>
+                    </a>
+                    <a href="categories.html?category=stories" class="category-item">
+                        <span class="category-name">Stories & Insights</span>
+                        <span class="category-count">89</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Search Modal (identical, kept functional) -->
+    <div id="searchModal" class="search-modal">
+        <div class="search-container">
+            <div class="search-header">
+                <h2><i class="fas fa-search"></i> Search Articles & Blogs</h2>
+                <button class="close-search" onclick="closeSearch()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="search-input-wrapper">
+                <div class="search-input-group">
+                    <input type="text" id="searchInput" placeholder="Search for articles, topics, or keywords..." autocomplete="off">
+                    <button onclick="performSearch()"><i class="fas fa-search"></i> <span>Search</span></button>
+                </div>
+                <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;" id="recentSearches"></div>
+            </div>
+            <div class="search-filters">
+                <div class="filter-tabs">
+                    <button class="search-filter-btn active" data-filter="all" onclick="filterSearch('all', event)">All</button>
+                    <button class="search-filter-btn" data-filter="articles" onclick="filterSearch('articles', event)">Articles</button>
+                    <button class="search-filter-btn" data-filter="blogs" onclick="filterSearch('blogs', event)">Blogs</button>
+                </div>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Icons (Bottom Navigation) -->
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-icon active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="blog.html" class="nav-icon">
+            <i class="fas fa-blog"></i>
+            <span>Blog</span>
+        </a>
+        <a href="blog.categories.html" class="nav-icon">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="#" class="nav-icon" id="mobileJobsBtn">
+            <i class="fas fa-briefcase"></i>
+            <span>Jobs</span>
+        </a>
+        <a href="#" class="nav-icon" id="mobileSubscribeIcon">
+            <i class="fas fa-envelope"></i>
+            <span>Subscribe</span>
+        </a>
+    </div>
+
+   
+    <!-- ========== SCRIPT: categories data + search ========== -->
+     <script src="js/supabase.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/blog.js" type="module"></script>
+    <script type="module">
+        // ---------- Supabase client (for search) ----------
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        const supabaseUrl = 'https://xtubniixvmwluwybbpos.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0dWJuaWl4dm13bHV3eWJicG9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1ODc4MDUsImV4cCI6MjA4NjE2MzgwNX0.P278_vaPqKyPcjlaFVqmFHJC6OcqZU30gk2b5SyCOI4';
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+        // ---------- STATIC CATEGORIES DATA ----------
+        const categoriesList = [
+            { id: 1, slug: 'career-clarity', title: 'Career Clarity & Exploration', icon: 'fas fa-search',
+              description: 'Discover your career path, understand different industries, and make informed career decisions with our comprehensive guidance and industry insights.',
+              stats: { articles: 45, reads: '12K+', duration: '3-5 min' },
+              topics: ['Career Assessment', 'Industry Research', 'Decision Making', 'Path Exploration', 'Self-Discovery'] },
+            { id: 2, slug: 'skill-development', title: 'Skill Development & Learning', icon: 'fas fa-laptop-code',
+              description: 'Master in-demand skills with practical guides, learning roadmaps, and actionable strategies for professional growth in the African market.',
+              stats: { articles: 78, reads: '25K+', duration: '5-7 min' },
+              topics: ['Technical Skills', 'Soft Skills', 'Learning Paths', 'Online Courses', 'Certifications'] },
+            { id: 3, slug: 'job-search', title: 'Job Search & Career Advancement', icon: 'fas fa-briefcase',
+              description: 'Navigate your job search successfully with CV guidance, interview preparation, career switching strategies, and workplace growth techniques.',
+              stats: { articles: 62, reads: '18K+', duration: '4-6 min' },
+              topics: ['CV Writing', 'Interview Prep', 'Networking', 'Career Switch', 'Promotion'] },
+            { id: 4, slug: 'opportunities', title: 'Opportunities & Openings', icon: 'fas fa-star',
+              description: 'Access curated job listings, internships, graduate programs, and company spotlights specifically tailored for the African job market.',
+              stats: { articles: '120+', reads: '35K+', duration: '2-4 min' },
+              topics: ['Job Alerts', 'Internships', 'Graduate Programs', 'Company Reviews', 'Application Tips'] },
+            { id: 5, slug: 'professionals', title: 'Professionals & Leadership', icon: 'fas fa-user-tie',
+              description: 'Advance your career with leadership development resources, workplace effectiveness strategies, and professional growth frameworks.',
+              stats: { articles: 54, reads: '15K+', duration: '6-8 min' },
+              topics: ['Leadership', 'Management', 'Productivity', 'Career Growth', 'Work-Life Balance'] },
+            { id: 6, slug: 'companies', title: 'Companies & Employers', icon: 'fas fa-building',
+              description: 'Gain insights into employer expectations, hiring best practices, and what companies look for in talent across various industries.',
+              stats: { articles: 36, reads: '8K+', duration: '4-5 min' },
+              topics: ['Employer Insights', 'Hiring Trends', 'Company Culture', 'Talent Needs', 'Industry Demand'] },
+            { id: 7, slug: 'stories', title: 'Stories, Mentorship & Insights', icon: 'fas fa-book-open',
+              description: 'Learn from real career journeys, mentorship advice, and personal insights that provide practical lessons and inspiration.',
+              stats: { articles: 89, reads: '30K+', duration: '7-10 min' },
+              topics: ['Career Stories', 'Mentorship', 'Lessons Learned', 'Success Stories', 'Challenges'] }
+        ];
+
+        // Render all categories into the left grid
+        const grid = document.getElementById('allCategoriesGrid');
+        grid.innerHTML = categoriesList.map(cat => {
+            // Build the correct individual category URL (e.g., categories.html?category=career-clarity)
+            const categoryUrl = `categories.html?category=${cat.slug}`;
+            return `
+            <div class="category-card-detailed category-${cat.id}">
+                <div class="category-icon-large"><i class="${cat.icon}"></i></div>
+                <div class="category-content">
+                    <h2>${cat.title}</h2>
+                    <p class="category-description">${cat.description}</p>
+                    <div class="category-stats">
+                        <div class="stat-item"><span class="stat-number">${cat.stats.articles}</span><span class="stat-label">Articles</span></div>
+                        <div class="stat-item"><span class="stat-number">${cat.stats.reads}</span><span class="stat-label">Total Reads</span></div>
+                        <div class="stat-item"><span class="stat-number">${cat.stats.duration}</span><span class="stat-label">Avg Read Time</span></div>
+                    </div>
+                    <div class="category-topics">
+                        <h4>Key Topics Covered</h4>
+                        <div class="topics-list">${cat.topics.map(t => `<span class="topic-tag">${t}</span>`).join('')}</div>
+                    </div>
+                    <div class="category-action">
+                        <a href="${categoryUrl}" class="btn-explore-category">
+                            <i class="fas fa-book-open"></i> Explore All Articles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `}).join('');
+
+        
+    </script>
+</body>
+</html>
