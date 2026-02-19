@@ -558,9 +558,7 @@ body {
     }
 }
 
-/* Add these shapes to your HTML right after hero-content div */
-/* <div class="hero-shape hero-shape-1"></div>
-   <div class="hero-shape hero-shape-2"></div> */
+
 
 /* Responsive design */
 @media (max-width: 968px) {

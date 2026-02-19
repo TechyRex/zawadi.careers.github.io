@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs & Opportunities · Zawadi Careers</title>
+    <!-- Font Awesome (same as pattern) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- favicon placeholder -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGbSURBVFhH7Zc9TsNAEIXnBCkF0cA1OAAKJQ2i5BQcgSNwA+gQJQ2i5BQcgSNQcgK4AFBkJPvZ8Y7txJMfO0V8kifNenbtfJ6d2Xg2WfzPFBYW/k9oAIsQQohMAgghRCYBhBAikwBCCJFJACGEWHslSZLoBypcgTbgw5h7Dk8w6YPKwFqDzVq4h3fwqL92MJAG1gC8Pj3dKB5U3l3O7j14B5d/j+AVzL02gbU2mH2pBK9g7o3I1Ikw65J48U61U5bPBaQY9+a5E7yAudf0NiiN81wLomWveNYYzL2mrAdR8l4+EEVzr2ntQdS8lw2iZq61B1HzXjYQT6I1+GX2I+DBtQdR8142EE+iNfhl9iPQQdS8lw3Ek2gNfpn9CHQQNe9lA/EkWoNfZj8CHUTNe9lAPInW4JfZj0AHUfNeNhBPojX4ZfYj0EHUvJcNxJNoDX6Z/Qh0EDXvZQPxJFqDX2Y/Ah1EzXvZQDyJ1uCX2Y9AB1HzXjYQT6I1+GX2I9BB1LyXDcSTaA1+mf0IdBA172UD8SRag19mPwIdRM172UA8idbgl9mPwH9d4AvsWAT74tPCLgAAAABJRU5ErkJggg==">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/images/zawadi-logo.png">
+
+    <style>
+        /* === CSS RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0066cc;
+            --secondary-blue: #00b3ff;
+            --dark-blue: #0a2540;
+            --light-blue: #e6f7ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --border-color: #e5e7eb;
+            --bg-light: #f9fafb;
+            --text-light: #6b7280;
+            --text-dark: #1f2937;
+            --electric-blue: #00b3ff;
+            --content-width: 1200px;
+            --main-width: 780px;
+            --sidebar-width: 320px;
+            --navbar-height: 70px;
+            --category-bar-height: 65px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: var(--gray-50);
+            padding-top: 0; /* Will be handled by spacing */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: var(--navbar-height);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--dark-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-blue);
+        }
+
+        /* ===== BLOG HEADER ===== */
+        .blog-header {
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #0a2540 50%, #001a33 100%);
+            color: white;
+            padding: 60px 16px 50px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .blog-header .container {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .blog-header h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: white;
+            max-width: 800px;
+        }
+
+        .blog-header .subtitle {
+            font-size: clamp(0.95rem, 3vw, 1.2rem);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Search Bar */
+        .blog-search {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 4px 4px 4px 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-container i {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 0.875rem 0.75rem;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-container .search-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .search-container .search-btn:hover {
+            background: var(--secondary-blue);
+        }
+
+        .search-options {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .search-options span {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+        }
+
+        .search-options select {
+            padding: 0.4rem 1.75rem 0.4rem 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            outline: none;
+            font-size: 0.85rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 14px;
+            max-width: 150px;
+        }
+
+        /* ===== CATEGORY FILTERS - FIXED POSITIONING (NO OVERLAY) ===== */
+        .category-filters-enhanced {
+            background: white;
+            padding: 0.75rem 0;
+            position: sticky;
+            top: var(--navbar-height); /* Sticks right below navbar */
+            z-index: 900; /* Lower than navbar, higher than content */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border-color);
+            height: var(--category-bar-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-scroll-container {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: 0 16px;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-blue) var(--border-color);
+        }
+
+        /* Custom scrollbar */
+        .filter-scroll-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .filter-scroll-container::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .filter-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.25rem 0 0.5rem;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        .filter-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .filter-pill i {
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+        }
+
+        .filter-pill:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        .filter-pill:hover i { color: white; }
+
+        .filter-pill.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        .filter-pill.active i { color: white; }
+
+        /* ===== MAIN CONTENT - PUSHED DOWN TO AVOID OVERLAY ===== */
+        .blog-content {
+            padding: 2rem 0 4rem;
+            background: var(--gray-50);
+            /* No negative margin, content naturally starts after category bar */
+        }
+
+        .blog-layout {
+            display: grid;
+            grid-template-columns: var(--main-width) var(--sidebar-width);
+            gap: 3rem;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .blog-main {
+            width: 100%;
+        }
+
+        .blog-posts {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        /* ===== COMING SOON CARD ===== */
+        .coming-soon-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid var(--gray-200);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .coming-soon-icon {
+            font-size: 4rem;
+            color: var(--primary-blue);
+            background: var(--light-blue);
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon-card h2 {
+            font-size: 2.5rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .coming-soon-message {
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            max-width: 500px;
+            margin: 0 auto 1rem;
+        }
+
+        .notify-badge {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border: 1px dashed var(--primary-blue);
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin: 1rem 0 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .notify-badge:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .opportunity-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            padding-top: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+        .tag-item i {
+            font-size: 1.8rem;
+            color: var(--secondary-blue);
+            background: var(--gray-100);
+            padding: 0.7rem;
+            border-radius: 50%;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .blog-sidebar {
+            width: 100%;
+            max-width: var(--sidebar-width);
+            position: sticky;
+            top: calc(var(--navbar-height) + var(--category-bar-height) + 20px);
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-widget h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .sidebar-widget h3 i { color: var(--primary-blue); }
+
+        .newsletter-widget {
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #0a2540 100%);
+            color: white;
+            border: none;
+        }
+        .newsletter-widget h3 { color: white; border-bottom-color: rgba(255,255,255,0.2); }
+        .newsletter-widget p { color: rgba(255,255,255,0.9); margin-bottom: 1.25rem; }
+
+        .sidebar-newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .sidebar-newsletter-form input {
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            outline: none;
+        }
+        .sidebar-newsletter-form button {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sidebar-newsletter-form button:hover { background: var(--secondary-blue); }
+
+        .popular-posts .popular-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        .popular-item .popular-img {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .popular-item h4 { 
+            font-size: 0.95rem; 
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .popular-item p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .category-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .category-item:hover { 
+            background: var(--primary-blue); 
+            color: white; 
+        }
+        .category-item:hover .category-count {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .category-count { 
+            background: white; 
+            padding: 0.2rem 0.8rem; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            color: var(--primary-blue);
+            transition: all 0.2s;
+        }
+
+        .time-indicators {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .time-indicator {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+        .time-indicator.short { background: #10b981; }
+        .time-indicator.medium { background: #f59e0b; }
+        .time-indicator.long { background: #ef4444; }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 3rem 0 1rem;
+        }
+        .page-number {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+        .page-number.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        /* ===== MOBILE BOTTOM NAV ===== */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 0.5rem;
+            border-top: 1px solid var(--border-color);
+            z-index: 1000;
+            justify-content: space-around;
+        }
+
+        .nav-icon {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.7rem;
+            padding: 0.3rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-icon i {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-icon.active {
+            color: var(--primary-blue);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--dark-blue);
+            color: white;
+            padding: 2.5rem 0 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--gray-300);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover { color: white; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .blog-layout { 
+                grid-template-columns: 1fr; 
+                gap: 2rem;
+            }
+            .blog-sidebar { 
+                position: static; 
+                max-width: 600px; 
+                margin: 0 auto; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --navbar-height: 60px;
+                --category-bar-height: 60px;
+            }
+
+            .navbar { padding: 0.5rem 0; }
+            .nav-links { gap: 1rem; }
+            
+            .blog-header { padding: 40px 16px; }
+            .blog-header h1 { font-size: 2rem; }
+            
+            .search-container {
+                flex-direction: column;
+                background: transparent;
+                border: none;
+                gap: 0.5rem;
+            }
+            .search-container i { display: none; }
+            .search-container input {
+                width: 100%;
+                background: rgba(255,255,255,0.1);
+                border-radius: 50px;
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+            .search-container .search-btn { width: 100%; }
+            
+            .search-options { flex-direction: column; align-items: stretch; }
+            .search-options select { max-width: 100%; }
+
+            .mobile-bottom-nav { display: flex; }
+            body { padding-bottom: 70px; }
+
+            .coming-soon-card { padding: 2rem 1.5rem; }
+            .coming-soon-icon { width: 100px; height: 100px; line-height: 100px; font-size: 3rem; }
+            .coming-soon-card h2 { font-size: 2rem; }
+            .opportunity-tags { gap: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .filter-pill span { display: none; }
+            .filter-pill {
+                padding: 0.6rem;
+                width: 45px;
+                height: 45px;
+                justify-content: center;
+            }
+            .filter-pill i { font-size: 1.1rem; margin: 0; }
+            
+            .coming-soon-message { font-size: 1rem; }
+            .tag-item i { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/zawadi-logo.png" alt="Zawadi Careers">
+                <!--<span>Zawadi Careers</span>-->
+            </a>
+            
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link"><i class="fas fa-th-large"></i> Categories</a>
+                    <div class="dropdown-content">
+                        <a href="categories.html?category=career-clarity">Career Clarity</a>
+                        <a href="categories.html?category=skill-development">Skill Development</a>
+                        <a href="categories.html?category=job-search">Job Search</a>
+                        <a href="categories.html?category=opportunities">Opportunities</a>
+                        <a href="categories.html?category=professionals">Professionals</a>
+                        <a href="categories.html?category=companies">Companies</a>
+                        <a href="categories.html?category=stories">Stories & Insights</a>
+                    </div>
+                </div>
+                <a href="blog.html" class="nav-link"><i class="fas fa-blog"></i> Blog</a>
+                <a href="#" class="nav-link"><i class="fas fa-briefcase"></i> Jobs</a>
+                <a href="#" class="nav-link"><i class="fas fa-graduation-cap"></i> Learning</a>
+                <a href="#" class="nav-link"><i class="fas fa-users"></i> Mentorship</a>
+            </div>
+            
+            <!--<div class="nav-actions">
+                <button class="btn-subscribe-nav" id="subscribeBtn">
+                    <i class="fas fa-envelope"></i> Subscribe
+                </button>-->
+                <!-- <a href="admin-login.html" class="admin-link">
+                    <i class="fas fa-user-cog"></i> Admin 
+                </a> -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- JOBS HEADER -->
+    <section class="blog-header">
+        <div class="container">
+            <h1>Jobs & Opportunities</h1>
+            <p class="subtitle">Your next career move starts here – internships, graduate roles, and remote work across Africa.</p>
+            
+            <!-- Search bar -->
+            <div class="blog-search">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search jobs, internships, keywords...">
+                    <button class="search-btn">Search</button>
+                </div>
+                <div class="search-options">
+                    <span>Sort by:</span>
+                    <select>
+                        <option>Newest</option>
+                        <option>Oldest</option>
+                        <option>Deadline</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category filters - STICKY but properly positioned (doesn't overlay content) -->
+    <div class="category-filters-enhanced">
+        <div class="filter-scroll-container">
+            <div class="filter-pills">
+                <button class="filter-pill active"><i class="fas fa-briefcase"></i><span>All roles</span></button>
+                <button class="filter-pill"><i class="fas fa-laptop"></i><span>Remote</span></button>
+                <button class="filter-pill"><i class="fas fa-graduation-cap"></i><span>Internship</span></button>
+                <button class="filter-pill"><i class="fas fa-chart-line"></i><span>Entry level</span></button>
+                <button class="filter-pill"><i class="fas fa-building"></i><span>Graduate</span></button>
+                <button class="filter-pill"><i class="fas fa-globe"></i><span>Africa</span></button>
+                <button class="filter-pill"><i class="fas fa-code"></i><span>Tech</span></button>
+                <button class="filter-pill"><i class="fas fa-chart-pie"></i><span>Finance</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT - STARTS AFTER CATEGORY BAR (no overlay) -->
+    <section class="blog-content">
+        <div class="container">
+            <div class="blog-layout">
+                <!-- MAIN AREA: coming soon card -->
+                <div class="blog-main">
+                    <div class="blog-posts">
+                        <div class="coming-soon-card">
+                            <div class="coming-soon-icon"><i class="fas fa-briefcase-clock"></i></div>
+                            <h2>Coming Soon</h2>
+                            <div class="coming-soon-message">
+                                We're curating the best jobs & opportunities across Africa
+                            </div>
+                            <div class="notify-badge">
+                                <i class="fas fa-bell"></i> Notify me when live
+                            </div>
+                            <!-- preview tags -->
+                            <div class="opportunity-tags">
+                                <div class="tag-item"><i class="fas fa-laptop-house"></i><span>Remote</span></div>
+                                <div class="tag-item"><i class="fas fa-city"></i><span>Nairobi</span></div>
+                                <div class="tag-item"><i class="fas fa-graduation-cap"></i><span>Internships</span></div>
+                                <div class="tag-item"><i class="fas fa-chart-simple"></i><span>Entry-level</span></div>
+                                <div class="tag-item"><i class="fas fa-briefcase"></i><span>Full-time</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <span class="page-number active">1</span>
+                        <span class="page-number">2</span>
+                        <span class="page-number">3</span>
+                        <span class="page-number">4</span>
+                        <span class="page-number">5</span>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR -->
+                <aside class="blog-sidebar">
+                    <div class="sidebar-widget newsletter-widget">
+                        <h3><i class="fas fa-bell"></i> Job alerts</h3>
+                        <p>Get notified when new opportunities are posted</p>
+                        <form class="sidebar-newsletter-form">
+                            <input type="email" placeholder="Your email address">
+                            <button type="button">Subscribe</button>
+                        </form>
+                    </div>
+
+                    <div class="sidebar-widget popular-widget">
+                        <h3><i class="fas fa-fire"></i> Popular now</h3>
+                        <div class="popular-posts">
+                            <div class="popular-item">
+                                <div class="popular-img"><i class="fas fa-building"></i></div>
+                                <div>
+                                    <h4>Data Analyst, Remote</h4>
+                                    <p>📍 120 applicants</p>
+                                </div>
+                            </div>
+                            <div class="popular-item">
+                                <div class="popular-img"><i class="fas fa-code"></i></div>
+                                <div>
+                                    <h4>Frontend Intern, Lagos</h4>
+                                    <p>📍 3 days left</p>
+                                </div>
+                            </div>
+                            <div class="popular-item">
+                                <div class="popular-img"><i class="fas fa-chart-pie"></i></div>
+                                <div>
+                                    <h4>Finance Grad, Accra</h4>
+                                    <p>📍 Closing soon</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget categories-widget">
+                        <h3><i class="fas fa-tags"></i> Categories</h3>
+                        <div class="category-list">
+                            <a href="#" class="category-item"><span>Full-time</span><span class="category-count">86</span></a>
+                            <a href="#" class="category-item"><span>Internship</span><span class="category-count">42</span></a>
+                            <a href="#" class="category-item"><span>Remote</span><span class="category-count">110+</span></a>
+                            <a href="#" class="category-item"><span>Graduate</span><span class="category-count">23</span></a>
+                            <a href="#" class="category-item"><span>Entry Level</span><span class="category-count">67</span></a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3><i class="fas fa-hourglass-half"></i> Coming up</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 0.5rem;">Job board launching soon</p>
+                        <p style="font-weight: 600; color: var(--primary-blue);">April 2025</p>
+                        <div class="time-indicators" style="margin-top: 1rem;">
+                            <span class="time-indicator short"><i class="far fa-bell"></i> Notify</span>
+                            <span class="time-indicator medium"><i class="far fa-envelope"></i> Early access</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile bottom navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="#" class="nav-icon"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="#" class="nav-icon active"><i class="fas fa-briefcase"></i><span>Jobs</span></a>
+        <a href="#" class="nav-icon"><i class="fas fa-blog"></i><span>Blog</span></a>
+        <a href="#" class="nav-icon"><i class="fas fa-bookmark"></i><span>Saved</span></a>
+        <a href="#" class="nav-icon"><i class="fas fa-bell"></i><span>Alerts</span></a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Zawadi Careers</h3>
+                <p style="color: var(--gray-400);">© 2025 · Coming soon</p>
+            </div>
+            <div style="display: flex; gap: 2rem;">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Simple script for interactivity -->
+    <script>
+        document.querySelectorAll('.search-btn, .sidebar-newsletter-form button, .notify-badge').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Thanks! We\'ll notify you when jobs & opportunities launch.');
+            });
+        });
+        
+        // Prevent default on filter pills and category links
+        document.querySelectorAll('.filter-pill, .category-item').forEach(el => {
+            el.addEventListener('click', (e) => e.preventDefault());
+        });
+    </script>
+</body>
+</html>
