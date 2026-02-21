@@ -738,7 +738,7 @@ body {
     }
 }
 
-/* Dark mode */
+/* Dark mode 
 @media (prefers-color-scheme: dark) {
     .hero-stats {
         background: rgba(26, 31, 44, 0.9);

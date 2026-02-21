@@ -604,7 +604,7 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: var(--text-light);
+            color: #374151;
             font-size: 0.7rem;
             padding: 0.3rem;
             border-radius: 8px;
@@ -661,22 +661,65 @@
             .blog-header h1 { font-size: 2rem; }
             
             .search-container {
-                flex-direction: column;
-                background: transparent;
-                border: none;
-                gap: 0.5rem;
-            }
-            .search-container i { display: none; }
-            .search-container input {
-                width: 100%;
-                background: rgba(255,255,255,0.1);
-                border-radius: 50px;
-                border: 1px solid rgba(255,255,255,0.2);
-            }
-            .search-container .search-btn { width: 100%; }
-            
-            .search-options { flex-direction: column; align-items: stretch; }
-            .search-options select { max-width: 100%; }
+        display: flex;
+        flex-direction: row; /* Keep row layout */
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        padding: 4px 4px 4px 16px;
+        width: 100%;
+        gap: 0; /* Remove gap */
+    }
+    
+    .search-container i {
+        display: inline-block; /* Keep icon visible */
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        margin-right: 8px;
+    }
+    
+    .search-container input {
+        flex: 1;
+        padding: 0.875rem 0.5rem;
+        border: none;
+        background: transparent;
+        color: white;
+        font-size: 0.95rem;
+        outline: none;
+        width: auto; /* Reset width */
+        border-radius: 0; /* Reset border radius */
+    }
+    
+    .search-container .search-btn {
+        width: auto; /* Reset width */
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+        margin-left: 4px;
+    }
+    
+    /* Optional: make search options stack nicely */
+    .search-options {
+        flex-direction: row; /* Keep row on mobile */
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+    }
+    
+    .search-options select {
+        max-width: 150px;
+        padding: 0.4rem 1.75rem 0.4rem 0.75rem;
+    }
+
 
             .mobile-bottom-nav { display: flex; }
             body { padding-bottom: 70px; }
@@ -703,6 +746,28 @@
     </style>
 </head>
 <body>
+    <!-- Newsletter Popup -->
+    <div id="newsletterPopup" class="newsletter-popup">
+        <div class="popup-content">
+            <button class="close-popup">&times;</button>
+            <div class="popup-header">
+                <img src="assets/images/zawadi-logo.png" alt="Zawadi Logo" class="popup-logo">
+                <h3>Stay Updated with Career Opportunities!</h3>
+            </div>
+            <p>Subscribe to our newsletter for:</p>
+            <ul>
+                <li><i class="fas fa-check"></i> Latest job openings in Africa</li>
+                <li><i class="fas fa-check"></i> Career development tips</li>
+                <li><i class="fas fa-check"></i> Skill-building resources</li>
+                <li><i class="fas fa-check"></i> Industry insights</li>
+            </ul>
+            <form id="newsletterForm" class="newsletter-form">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit" class="btn-subscribe">Subscribe Now</button>
+            </form>
+            <p class="privacy-note">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </div>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -731,13 +796,7 @@
                 <a href="#" class="nav-link"><i class="fas fa-users"></i> Mentorship</a>
             </div>
             
-            <!--<div class="nav-actions">
-                <button class="btn-subscribe-nav" id="subscribeBtn">
-                    <i class="fas fa-envelope"></i> Subscribe
-                </button>-->
-                <!-- <a href="admin-login.html" class="admin-link">
-                    <i class="fas fa-user-cog"></i> Admin 
-                </a> -->
+           
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -824,13 +883,14 @@
                 </div>
 
                 <!-- SIDEBAR -->
+                 
                 <aside class="blog-sidebar">
                     <div class="sidebar-widget newsletter-widget">
                         <h3><i class="fas fa-bell"></i> Job alerts</h3>
                         <p>Get notified when new opportunities are posted</p>
                         <form class="sidebar-newsletter-form">
-                            <input type="email" placeholder="Your email address">
-                            <button type="button">Subscribe</button>
+                            <input type="email" placeholder="Your email" required>
+                            <button type="submit">Subscribe</button>
                         </form>
                     </div>
 
@@ -888,11 +948,13 @@
 
     <!-- Mobile bottom navigation -->
     <div class="mobile-bottom-nav">
-        <a href="#" class="nav-icon"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="index.html" class="nav-icon"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="#" class="nav-icon active"><i class="fas fa-briefcase"></i><span>Jobs</span></a>
-        <a href="#" class="nav-icon"><i class="fas fa-blog"></i><span>Blog</span></a>
+        <a href="blog.html" class="nav-icon"><i class="fas fa-blog"></i><span>Blog</span></a>
         <a href="#" class="nav-icon"><i class="fas fa-bookmark"></i><span>Saved</span></a>
-        <a href="#" class="nav-icon"><i class="fas fa-bell"></i><span>Alerts</span></a>
+        <a href="#" class="nav-icon" id="mobileSubscribeIcon">
+            <i class="fas fa-bell"></i><span>Alerts</span></a>
+        <!--<a href="#" class="nav-icon"><i class="fas fa-bell"></i><span>Alerts</span></a>-->
     </div>
 
     <!-- Footer -->
@@ -912,18 +974,9 @@
     </footer>
 
     <!-- Simple script for interactivity -->
-    <script>
-        document.querySelectorAll('.search-btn, .sidebar-newsletter-form button, .notify-badge').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                alert('Thanks! We\'ll notify you when jobs & opportunities launch.');
-            });
-        });
-        
-        // Prevent default on filter pills and category links
-        document.querySelectorAll('.filter-pill, .category-item').forEach(el => {
-            el.addEventListener('click', (e) => e.preventDefault());
-        });
-    </script>
+     <script src="js/supabase.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
+    <script src="js/blog.js" type="module"></script>
+    
 </body>
 </html>
